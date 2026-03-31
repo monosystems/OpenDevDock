@@ -8,30 +8,30 @@
 
 ## Reporting a Vulnerability
 
-Wenn du eine Sicherheitslücke findest, bitte **nicht** in öffentlichen Issues melden.
+If you find a security vulnerability, please **do not** report it in public issues.
 
-### So funktioniert's:
+### How it works:
 
-1. **Private Disclosure**: Öffne kein öffentliches Issue
-2. **Email**: Sende eine detaillierte Beschreibung an security@monosystems.ch
-3. **Erwarte Feedback** innerhalb von 48 Stunden
-4. **Kooperation**: Wir arbeiten zusammen um das Problem zu lösen
+1. **Private Disclosure**: Do not open a public issue
+2. **Email**: Send a detailed description to security@monosystems.ch
+3. **Expect Feedback** within 48 hours
+4. **Cooperation**: We work together to resolve the issue
 
-### Was wir brauchen:
+### What we need:
 
-- Beschreibung der Lücke
-- Schritte zur Reproduktion
-- Möglicher Impact
-- Vorschläge für Fixes (optional)
+- Description of the vulnerability
+- Steps to reproduce
+- Potential impact
+- Suggested fixes (optional)
 
-### Was wir versprechen:
+### What we promise:
 
-- Schnelle Antwort (innen 48h)
-- Keine rechtlichen Konsequenzen für gute Faith Reports
-- Credit in Security Advisories (wenn gewünscht)
+- Fast response (within 48h)
+- No legal consequences for good faith reports
+- Credit in Security Advisories (if desired)
 
 ## Security Best Practices
 
-- App läuft mit minimalen Systemrechten
-- PTY-Zugriff nur auf explizit gewählte Workspaces
-- Keine Netzwerk-Kommunikation ohne User-Kontrolle
+- App runs with minimal system privileges
+- PTY access only to explicitly chosen workspaces
+- No network communication without user control

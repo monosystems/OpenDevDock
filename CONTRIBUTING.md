@@ -1,18 +1,18 @@
 # Contributing to OpenDevDock
 
-Danke für dein Interesse, zu OpenDevDock beizutragen!
+Thank you for your interest in contributing to OpenDevDock!
 
 ## Development Setup
 
 ```bash
-# Repository klonen
+# Clone the repository
 git clone https://github.com/monosystems/OpenDevDock.git
 cd OpenDevDock
 
-# Dependencies installieren
+# Install dependencies
 pnpm install
 
-# App entwickeln
+# Develop the app
 pnpm run tauri dev
 
 # Production build
@@ -22,12 +22,12 @@ pnpm run tauri build
 ## Branch Strategy
 
 - `main` – stable, release-ready
-- Feature-Branches: `feat/<feature-name>`
-- Bugfix-Branches: `fix/<bug-name>`
+- Feature branches: `feat/<feature-name>`
+- Bugfix branches: `fix/<bug-name>`
 
 ## Commit Messages
 
-Wir folgen [Conventional Commits](https://www.conventionalcommits.org/):
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 feat: add new terminal tab feature
@@ -39,24 +39,24 @@ test: add terminal manager tests
 
 ## Code Style
 
-- TypeScript mit strict mode
-- Functional components mit Hooks
-- Named exports für Komponenten
-- Explizite Typen für alle Funktionen
+- TypeScript with strict mode
+- Functional components with hooks
+- Named exports for components
+- Explicit types for all functions
 
 ## Pull Requests
 
-1. Fork erstellen
-2. Feature-Branch anlegen (`git checkout -b feat/my-feature`)
-3. Änderungen committen
-4. Pushen und PR erstellen
+1. Create a fork
+2. Create a feature branch (`git checkout -b feat/my-feature`)
+3. Commit your changes
+4. Push and create a PR
 
-PRs werden reviewed und gemergt wenn sie den Standards entsprechen.
+PRs are reviewed and merged when they meet the standards.
 
 ## Testing
 
-80% Test-Coverage erforderlich. Neue Features brauchen Tests.
+80% test coverage required. New features need tests.
 
-## Fragen?
+## Questions?
 
-GitHub Issues für Bugs und Feature-Requests.
+Use GitHub Issues for bugs and feature requests.
