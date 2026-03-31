@@ -6,8 +6,6 @@ on:
   pull_request:
     branches: [main]
 
-name: Build and Test
-
 jobs:
   build:
     strategy:

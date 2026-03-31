@@ -1,6 +1,6 @@
-## Beschreibung
+## Description
 
-<!-- Kurze Beschreibung was dieser PR macht -->
+<!-- Short description of what this PR does -->
 
 ## Type of Change
 
@@ -13,15 +13,15 @@
 
 ## Checklist
 
-- [ ] Code folgt dem Coding Style
-- [ ] Tests hinzugefügt/aktualisiert
-- [ ] Documentation aktualisiert
-- [ ] Keine unerwarteten Warnings
+- [ ] Code follows the coding style
+- [ ] Tests added/updated
+- [ ] Documentation updated
+- [ ] No unexpected warnings
 
-## Screenshots (falls UI-Änderungen)
+## Screenshots (if UI changes)
 
-<!-- Falls relevant, Screenshots oder GIFs hier -->
+<!-- Include screenshots or GIFs here if relevant -->
 
 ## Additional Context
 
-<!-- Weitere Informationen, Links zu Issues, etc. -->
+<!-- Additional information, links to issues, etc. -->
