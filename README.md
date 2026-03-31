@@ -7,28 +7,28 @@
 [![Tauri 2.0](https://img.shields.io/badge/Tauri-2.0-4B6BF4?logo=tauri)](https://tauri.app/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
 
-**OpenDevDock** ist ein terminal-first Developer Workspace für macOS und Linux. Dein Projekt immer im Blick, mit integriertem Terminal, Dateieditor und Session-Tracking – alles in einer Desktop-App.
+**OpenDevDock** is a terminal-first developer workspace for macOS and Linux. Keep your projects in view with an integrated terminal, file editor, and session tracking – all in one desktop app.
 
 [Website](https://github.com/monosystems/OpenDevDock) · [Docs](https://github.com/monosystems/OpenDevDock#development) · [Roadmap](docs/TODO.md)
 
 ## Features
 
-- **Terminal-first**: Direkter Zugriff auf professionelle Terminal-Funktionen mit xterm.js und PTY-Unterstützung
-- **Workspace-Management**: Projekte öffnen und verwalten mit integriertem Dateibaum
-- **Multi-Tab Terminal**: Mehrere Terminal-Sessions in Tabs parallel nutzen
-- **Dateieditor**: Dateien direkt im Workspace öffnen und bearbeiten mit Syntax-Highlighting
-- **Session-Tracking**: Änderungen verfolgen und vergangene Sessions wiederherstellen
+- **Terminal-first**: Direct access to professional terminal features with xterm.js and PTY support
+- **Workspace Management**: Open and manage projects with an integrated file tree
+- **Multi-Tab Terminal**: Multiple terminal sessions in parallel tabs
+- **File Editor**: Open and edit files directly in the workspace with syntax highlighting
+- **Session Tracking**: Track changes and restore previous sessions
 
 ## Quick Start
 
 ```bash
-# Dependencies installieren
+# Install dependencies
 pnpm install
 
-# Tauri App entwickeln
+# Develop the app
 pnpm run tauri dev
 
-# Produktion bauen
+# Production build
 pnpm run tauri build
 ```
 
@@ -39,23 +39,23 @@ pnpm run tauri build
 - **Terminal**: @xterm/xterm + portable-pty
 - **Editor**: Monaco Editor
 
-## Projektstruktur
+## Project Structure
 
 ```
 OpenDevDock/
 ├── src/                      # React Frontend
-│   ├── components/           # UI Komponenten
-│   ├── views/                # Seitenansichten
+│   ├── components/           # UI Components
+│   ├── views/                # Page Views
 │   ├── state/                # State Management
 │   ├── hooks/                # Custom Hooks
-│   └── commands/             # Tauri Command Wrapper
+│   └── commands/             # Tauri Command Wrappers
 │
 ├── src-tauri/                # Rust Backend
-│   ├── src/lib.rs            # Hauptlogik und Commands
+│   ├── src/lib.rs            # Main Logic and Commands
 │   └── capabilities/         # Tauri 2.0 Permissions
 │
-└── docs/                     # Dokumentation
-    └── TODO.md                # Feature Roadmap
+└── docs/                     # Documentation
+    └── TODO.md               # Feature Roadmap
 ```
 
 ## Development
@@ -74,7 +74,7 @@ pnpm run tauri dev
 
 ```bash
 pnpm run dev     # Vite dev server (hot reload)
-pnpm run build  # TypeScript check + production build
+pnpm run build   # TypeScript check + production build
 ```
 
 ### Commands
@@ -97,12 +97,12 @@ pnpm run build  # TypeScript check + production build
 │   File Tree      │         Main Workspace                 │
 │   (280px)        │                                       │
 │                  │   ┌─────────────────────────────────┐ │
-│   - Ordner       │   │  Tab Bar (Terminal + Files)    │ │
-│   - Dateien      │   ├─────────────────────────────────┤ │
+│   - Folders      │   │  Tab Bar (Terminal + Files)    │ │
+│   - Files        │   ├─────────────────────────────────┤ │
 │                  │   │                                 │ │
 │                  │   │    Active Tab Content           │ │
-│                  │   │    - Terminal (xterm.js)        │ │
-│                  │   │    - Editor (Monaco)           │ │
+│                  │   │    - Terminal (xterm.js)       │ │
+│                  │   │    - Editor (Monaco)          │ │
 │                  │   │                                 │ │
 │                  │   └─────────────────────────────────┘ │
 │                  │                                       │
@@ -111,17 +111,17 @@ pnpm run build  # TypeScript check + production build
 
 ## Roadmap
 
-Das Projekt folgt einem Slice-basierten Entwicklungsplan:
+The project follows a slice-based development plan:
 
-- **Slice 1** — Workspace Grundgerüst ✓
-- **Slice 2** — Terminal First Arbeitskern (in progress)
-- **Slice 3** — Dateien direkt im selben Raum
-- **Slice 4** — File Tree als Arbeitswerkzeug
-- **Slice 5** — Session Änderungskern
-- **Slice 6** — Session Historie
+- **Slice 1** — Workspace Foundation ✓
+- **Slice 2** — Terminal First Workflow (in progress)
+- **Slice 3** — Files in the Same Space
+- **Slice 4** — File Tree as a Working Tool
+- **Slice 5** — Session Change Tracking
+- **Slice 6** — Session History
 
-Siehe [docs/TODO.md](docs/TODO.md) für Details.
+See [docs/TODO.md](docs/TODO.md) for details.
 
 ## License
 
-MIT License - siehe [LICENSE](LICENSE)
+MIT License - see [LICENSE](LICENSE)
