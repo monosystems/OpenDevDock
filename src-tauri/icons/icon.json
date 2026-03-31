@@ -1,0 +1,10 @@
+{
+  "icons": [
+    {
+      "filename": "icon.png",
+      "idiom": "universal",
+      "platform": "any",
+      "size": "1024x1024"
+    }
+  ]
+}
