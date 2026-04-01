@@ -109,19 +109,6 @@ pnpm run build   # TypeScript check + production build
 └──────────────────┴──────────────────────────────────────┘
 ```
 
-## Roadmap
-
-The project follows a slice-based development plan:
-
-- **Slice 1** — Workspace Foundation ✓
-- **Slice 2** — Terminal First Workflow (in progress)
-- **Slice 3** — Files in the Same Space
-- **Slice 4** — File Tree as a Working Tool
-- **Slice 5** — Session Change Tracking
-- **Slice 6** — Session History
-
-See [docs/TODO.md](docs/TODO.md) for details.
-
 ## License
 
 MIT License - see [LICENSE](LICENSE)
