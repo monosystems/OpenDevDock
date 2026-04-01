@@ -5,6 +5,13 @@ import { FileTree } from "../components/FileTree";
 import { Terminal } from "../components/Terminal";
 import { EditorTab } from "../components/EditorTab";
 import { useTerminalManager } from "../hooks/useTerminalManager";
+import {
+  createFile,
+  createDirectory,
+  renamePath,
+  deletePath,
+  movePath,
+} from "../commands/fileOperations";
 
 interface WorkspaceViewProps {
   project: Project;
@@ -25,6 +32,7 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
   const [treeWidth, setTreeWidth] = useState(260);
   const [tabList, setTabList] = useState<TabItem[]>([]);
+  const [rootDragOver, setRootDragOver] = useState(false);
   
   // Refs for managing editor state - use refs to avoid re-renders
   const editorSaveHandlers = useRef<Map<string, () => void>>(new Map());
@@ -216,6 +224,82 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
     editorSaveHandlers.current.set(path, saveHandler);
   }, []);
 
+  const handleCreateFile = useCallback(
+    async (parentPath: string, name: string) => {
+      console.log("[WorkspaceView] handleCreateFile:", parentPath, name);
+      try {
+        const result = await createFile(parentPath, name);
+        console.log("[WorkspaceView] createFile result:", result);
+        await loadFileTree();
+      } catch (e) {
+        console.error("Failed to create file:", e);
+        alert(`Fehler beim Erstellen der Datei: ${e}`);
+      }
+    },
+    []
+  );
+
+  const handleCreateDirectory = useCallback(
+    async (parentPath: string, name: string) => {
+      try {
+        await createDirectory(parentPath, name);
+        await loadFileTree();
+      } catch (e) {
+        console.error("Failed to create directory:", e);
+        alert(`Fehler beim Erstellen des Ordners: ${e}`);
+      }
+    },
+    []
+  );
+
+  const handleRename = useCallback(
+    async (node: FileNode, newName: string) => {
+      try {
+        const result = await renamePath(node.path, newName);
+        await loadFileTree();
+        setTabList((prev) =>
+          prev.map((t) =>
+            t.path === node.path
+              ? { ...t, title: result.name, path: result.path }
+              : t
+          )
+        );
+      } catch (e) {
+        console.error("Failed to rename:", e);
+        alert(`Fehler beim Umbenennen: ${e}`);
+      }
+    },
+    []
+  );
+
+  const handleDelete = useCallback(
+    async (node: FileNode) => {
+      try {
+        await deletePath(node.path);
+        await loadFileTree();
+        setTabList((prev) => prev.filter((t) => t.path !== node.path));
+      } catch (e) {
+        console.error("Failed to delete:", e);
+        alert(`Fehler beim Löschen: ${e}`);
+      }
+    },
+    []
+  );
+
+  const handleMove = useCallback(
+    async (sourcePath: string, destDir: string) => {
+      console.log("[WorkspaceView] handleMove:", sourcePath, "->", destDir);
+      try {
+        await movePath(sourcePath, destDir);
+        await loadFileTree();
+      } catch (e) {
+        console.error("Failed to move:", e);
+        alert(`Fehler beim Verschieben: ${e}`);
+      }
+    },
+    []
+  );
+
   return (
     <div className="app-container">
       <div className="app-header">
@@ -225,8 +309,25 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
       <div className="app-content">
         <div className="file-tree" style={{ width: treeWidth }}>
           <div className="file-tree-header">Explorer</div>
+          <div
+            className={`file-tree-root-drop ${rootDragOver ? 'file-node-drag-over' : ''}`}
+            data-node-path={project.path}
+            data-is-dir="true"
+          >
+            🏠 {project.name}/
+          </div>
           <div className="file-tree-content">
-            <FileTree nodes={fileTree} onFileClick={handleFileClick} />
+            <FileTree
+              nodes={fileTree}
+              onFileClick={handleFileClick}
+              onCreateFile={handleCreateFile}
+              onCreateDirectory={handleCreateDirectory}
+              onRename={handleRename}
+              onDelete={handleDelete}
+              onMove={handleMove}
+              rootPath={project.path}
+              onRootDragOverChange={setRootDragOver}
+            />
           </div>
         </div>
         <div

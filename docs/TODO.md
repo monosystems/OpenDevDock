@@ -64,17 +64,17 @@
     **Am Ende von Slice 3 soll der zusammenhängende Arbeitsfluss aus Terminal und Datei-Arbeit getestet werden. Zentrale Frage: Fühlt sich das Arbeiten mit beiden Bereichen im selben Workspace wirklich besser an als ständiges Wechseln zwischen Apps? Achte besonders darauf, ob der Übergang zwischen Terminal und Datei-Tab reibungslos ist und ob die Arbeit in beiden Bereichen gleichermaßen flüssig funktioniert.**
     lice 4
 - [ ] <!--LS2IQg10dcgF_0VjyHBHD--> Slice 4 - File Tree als Arbeitswerkzeug
-  - [ ] <!--NvWn8wlo-3OZHW8RhmeMM--> Erstellen neuer Dateien aus dem File Tree unterstützen
+  - [x] <!--NvWn8wlo-3OZHW8RhmeMM--> Erstellen neuer Dateien aus dem File Tree unterstützen
     **Der Nutzer soll direkt aus dem File Tree heraus neue Dateien anlegen können, ohne den Umweg über das Terminal oder eine externe Anwendung. Das ist ein zentraler Schritt, um den File Tree vom reinen Navigator zum echten Arbeitswerkzeug zu machen. Wichtig ist, dass der neue Dateiname sofort vergebbar und die Datei direkt im Anschluss editierbar ist.**
-  - [ ] <!--z_8xVYd4LAlflcxWu4Sl7--> Erstellen neuer Ordner aus dem File Tree unterstützen
+  - [x] <!--z_8xVYd4LAlflcxWu4Sl7--> Erstellen neuer Ordner aus dem File Tree unterstützen
     **Analog zum Anlegen neuer Dateien soll der File Tree auch das Erstellen neuer Ordner ermöglichen. Das unterstützt die vollständige Strukturarbeit innerhalb der App. Auch hier ist wichtig, dass der neue Ordner sofort verfügbar und nutzbar ist, ohne die App oder den Workflow wechseln zu müssen.**
-  - [ ] <!--fcSY2gX14KH5oKfzcf7h0--> Umbenennen von Dateien und Ordnern ermöglichen
+  - [x] <!--fcSY2gX14KH5oKfzcf7h0--> Umbenennen von Dateien und Ordnern ermöglichen
     **Der Nutzer soll direkt im File Tree Dateien und Ordner umbenennen können. Das ist eine grundlegende Strukturoperation, die ohne externen Dateimanager funktionieren muss. Wichtig ist, dass die Umbenennung zuverlässig ist, keine unbeabsichtigten Nebeneffekte hat und der Kontext, etwa geöffnete Tabs, erhalten bleibt.**
-  - [ ] <!--ll4wBjGK93FSBpu0z-sz9--> Löschen von Dateien und Ordnern mit Bestätigung umsetzen
+  - [x] <!--ll4wBjGK93FSBpu0z-sz9--> Löschen von Dateien und Ordnern mit Bestätigung umsetzen
     **Löschen soll mit einer Bestätigungsabfrage geschehen, bevor die Operation ausgeführt wird. Das ist wichtig, weil versehentliches Löschen im Projektkontext deutlich schmerzhafter ist als im normalen Dateisystem. Die Bestätigung soll klar kommunizieren, was gelöscht wird, und einen Abbruch leicht möglich machen.**
-  - [ ] <!--6W2GNXsPNjD2a8Lr_F2oq--> Drag and Drop zum Verschieben im File Tree unterstützen
+  - [x] <!--6W2GNXsPNjD2a8Lr_F2oq--> Drag and Drop zum Verschieben im File Tree unterstützen
     **Der Nutzer soll Dateien und Ordner per Drag and Drop im File Tree verschieben können. Das ist für die Strukturarbeit ein deutlicher Komfortgewinn und entspricht dem natürlichen Workflow in Dateimanagern. Wichtig ist, dass die Zielposition eindeutig erkennbar ist und die Operation zuverlässig ausgeführt wird.**
-  - [ ] <!--65xINYWsi5xuPbA6UbhUw--> Fehlerfälle bei Dateioperationen sauber behandeln
+  - [x] <!--65xINYWsi5xuPbA6UbhUw--> Fehlerfälle bei Dateioperationen sauber behandeln
     **Alle Dateioperationen sollen auch bei Fehlern sauber abgefangen werden: ungültige Namen, fehlende Schreibrechte, nicht gefundene Pfade, gleichzeitige Zugriffe oder abgebrochene Operationen. Der Nutzer soll in jedem Fall eine klare, verständliche Rückmeldung bekommen, was passiert ist und wie er weiterkommt.**
   - [ ] <!--5YxamI4YKx5UZIkOWEbWM--> Prüfen, ob Strukturarbeit ohne externen Dateimanager zuverlässig funktioniert
     **Am Ende von Slice 4 soll der File Tree als vollständiges Strukturierungswerkzeug getestet werden. Zentrale Frage: Kann der Nutzer alle wesentlichen Datei- und Ordneroperationen durchführen, ohne die App zu verlassen oder einen externen Dateimanager zu benutzen? Achte besonders darauf, ob die Operationen zuverlässig, die Fehlerbehandlung verständlich und die Übergänge zwischen Aktionen reibungslos sind.**

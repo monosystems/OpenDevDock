@@ -216,6 +216,31 @@ input:focus {
   letter-spacing: 0.5px;
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.file-tree-root-drop {
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-bottom: 2px solid var(--accent-color);
+  font-weight: bold;
+  font-size: 13px;
+  cursor: default;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-color);
+}
+
+.file-tree-root-drop:hover {
+  background: var(--bg-tertiary);
+}
+
+.file-tree-root-drop.file-node-drag-over {
+  background: var(--accent-color) !important;
+  color: white;
+  opacity: 1;
 }
 
 .file-tree-content {
@@ -354,6 +379,8 @@ input:focus {
   background: var(--bg-primary);
   position: relative;
   box-sizing: border-box;
+  /* DEBUG: Temporär pointer-events deaktivieren um xterm-Overlay zu testen */
+  pointer-events: none;
 }
 
 .terminal-wrapper {
@@ -440,4 +467,197 @@ input:focus {
 /* Ensure Monaco editor takes full height */
 .monaco-editor .overflow-guard {
   height: 100% !important;
+}
+
+/* Context Menu */
+.context-menu {
+  position: fixed;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 160px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.context-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.context-menu-item-danger {
+  color: var(--error-color);
+}
+
+.context-menu-item-danger:hover {
+  background: rgba(241, 76, 76, 0.15);
+}
+
+.context-menu-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 0;
+}
+
+/* File Node Rename Input */
+.file-node-rename-input {
+  flex: 1;
+  padding: 2px 4px;
+  font-size: 13px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--accent-color);
+  border-radius: 2px;
+  color: var(--text-primary);
+  min-width: 0;
+}
+
+.file-node-rename-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+/* Drag and Drop */
+.file-node {
+  transition: background-color 0.1s;
+}
+
+.file-node[draggable="true"] {
+  cursor: grab;
+}
+
+.file-node[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.file-node.file-node-drag-over {
+  background: var(--accent-color) !important;
+  opacity: 1 !important;
+}
+
+.file-node.dragging {
+  opacity: 0.5;
+  cursor: grabbing !important;
+}
+
+.file-node-root {
+  background: var(--bg-tertiary);
+  border-bottom: 2px solid var(--accent-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.file-node-root.file-node-drag-over {
+  background: var(--accent-color) !important;
+  opacity: 1 !important;
+}
+
+.file-node-root .file-node-name {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Prevent text selection during pointer drag */
+body.pointer-drag-active,
+body.pointer-drag-active * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  cursor: grabbing !important;
+}
+
+/* Allow clicks on interactive elements even during drag */
+body.pointer-drag-active button,
+body.pointer-drag-active input,
+body.pointer-drag-active textarea {
+  cursor: pointer;
+}
+
+/* Confirm Dialog */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.confirm-dialog {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px 24px;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.confirm-dialog p {
+  margin-bottom: 20px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.confirm-dialog strong {
+  color: var(--text-primary);
+}
+
+.confirm-dialog-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-cancel:hover {
+  background: var(--bg-hover);
+}
+
+.btn-danger {
+  padding: 8px 16px;
+  background: var(--error-color);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-danger:hover {
+  background: #d13c3c;
+}
+
+/* Clipboard Indicator */
+.clipboard-indicator {
+  padding: 6px 12px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--text-secondary);
 }
