@@ -1,10 +1,15 @@
-import { Project } from "../state/types";
+import { Project, Session } from "../state/types";
+import { SessionHistoryList } from "../components/SessionHistoryList";
 
 interface StartViewProps {
   projects: Project[];
   onAddProject: () => void;
   onOpenProject: (project: Project) => void;
   onRemoveProject: (projectPath: string) => void;
+  sessionsByProject: Record<string, Session[]>;
+  onOpenSession: (session: Session) => void;
+  onDeleteSession: (sessionId: string, projectPath: string) => void;
+  onUpdateSessionName: (sessionId: string, projectPath: string, newName: string) => void;
 }
 
 export function StartView({
@@ -12,6 +17,10 @@ export function StartView({
   onAddProject,
   onOpenProject,
   onRemoveProject,
+  sessionsByProject,
+  onOpenSession,
+  onDeleteSession,
+  onUpdateSessionName,
 }: StartViewProps) {
   return (
     <div className="start-view">
@@ -26,25 +35,35 @@ export function StartView({
       ) : (
         <div className="project-list">
           {projects.map((project) => (
-            <div
-              key={project.path}
-              className="project-item"
-              onClick={() => onOpenProject(project)}
-            >
-              <div className="project-item-info">
-                <span className="project-item-name">{project.name}</span>
-                <span className="project-item-path">{project.path}</span>
+            <div key={project.path} className="project-entry">
+              <div
+                className="project-item"
+                onClick={() => onOpenProject(project)}
+              >
+                <div className="project-item-info">
+                  <span className="project-item-name">{project.name}</span>
+                  <span className="project-item-path">{project.path}</span>
+                </div>
+                <div className="project-item-actions">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemoveProject(project.path);
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
-              <div className="project-item-actions">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onRemoveProject(project.path);
-                  }}
-                >
-                  Remove
-                </button>
-              </div>
+              {(sessionsByProject[project.path]?.length ?? 0) > 0 && (
+                <SessionHistoryList
+                  projectPath={project.path}
+                  sessions={sessionsByProject[project.path] || []}
+                  onOpenSession={onOpenSession}
+                  onDeleteSession={onDeleteSession}
+                  onUpdateSessionName={onUpdateSessionName}
+                />
+              )}
             </div>
           ))}
         </div>

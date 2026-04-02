@@ -333,6 +333,8 @@ fn create_terminal(
 
     log::info!("Shell spawned with pid: {:?}", child.process_id());
 
+    log::info!("Writer and reader obtained successfully");
+
     // IMPORTANT: Store pty_pair FIRST to keep slave PTY open
     // The child process stays alive as long as the slave end of the PTY is open
     // We must not drop pty_pair until the terminal is closed
@@ -400,12 +402,16 @@ fn create_terminal(
 
 #[tauri::command]
 fn write_terminal(id: String, data: String, manager: State<PtyManager>) -> Result<(), String> {
+    log::info!("write_terminal called: id={}, data_len={}", id, data.len());
     let mut writers = manager.writers.lock().unwrap();
     if let Some(writer) = writers.get_mut(&id) {
         writer
             .write_all(data.as_bytes())
             .map_err(|e| format!("Write error: {}", e))?;
         writer.flush().map_err(|e| format!("Flush error: {}", e))?;
+    } else {
+        log::error!("write_terminal: writer not found for id={}", id);
+        return Err(format!("Writer not found for terminal: {}", id));
     }
     Ok(())
 }
@@ -440,6 +446,25 @@ fn close_terminal(id: String, manager: State<PtyManager>) -> Result<(), String> 
     Ok(())
 }
 
+#[tauri::command]
+fn get_git_branch(path: String) -> Result<String, String> {
+    let output = std::process::Command::new("git")
+        .args(["-C", &path, "rev-parse", "--abbrev-ref", "HEAD"])
+        .output()
+        .map_err(|e| format!("Failed to execute git command: {}", e))?;
+
+    if output.status.success() {
+        Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
+    } else {
+        Err("Not a git repository".to_string())
+    }
+}
+
+#[tauri::command]
+fn is_git_repository(path: String) -> bool {
+    PathBuf::from(&path).join(".git").exists()
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     env_logger::init();
@@ -463,7 +488,9 @@ pub fn run() {
             create_terminal,
             write_terminal,
             resize_terminal,
-            close_terminal
+            close_terminal,
+            get_git_branch,
+            is_git_repository
         ])
         .setup(|app| {
             log::info!("Application setup complete");

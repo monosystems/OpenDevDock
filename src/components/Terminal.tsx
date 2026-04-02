@@ -100,7 +100,8 @@ export function Terminal({ terminalId, onResize }: TerminalProps) {
       });
       
       term.onData((data) => {
-        invoke("write_terminal", { id: terminalId, data }).catch(console.error);
+        console.log("[Terminal] onData:", JSON.stringify({ id: terminalId, data }));
+        invoke("write_terminal", { id: terminalId, data }).catch((e) => console.error("[Terminal] write_terminal error:", e));
       });
     }
     
