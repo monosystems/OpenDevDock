@@ -6,8 +6,9 @@ import { editor } from "monaco-editor";
 interface EditorTabProps {
   path: string;
   onSave?: () => void;
-  onContentChange?: (isDirty: boolean) => void;
+  onContentChange?: (isDirty: boolean, content: string) => void;
   onMount?: (saveHandler: () => void) => void;
+  onOriginalContentLoaded?: (content: string) => void;
 }
 
 // Map file extensions to Monaco language IDs
@@ -64,7 +65,7 @@ function getLanguageFromPath(filePath: string): string {
   return languageMap[ext] || "plaintext";
 }
 
-export function EditorTab({ path, onSave, onContentChange, onMount }: EditorTabProps) {
+export function EditorTab({ path, onSave, onContentChange, onMount, onOriginalContentLoaded }: EditorTabProps) {
   // State hooks - always called in same order
   const [content, setContent] = useState<string>("");
   const [originalContent, setOriginalContent] = useState<string>("");
@@ -95,6 +96,7 @@ export function EditorTab({ path, onSave, onContentChange, onMount }: EditorTabP
         setOriginalContent(text);
         contentRef.current = text;
         isDirtyRef.current = false;
+        onOriginalContentLoaded?.(text);
       } catch (e) {
         if (cancelled) return;
         console.error("Failed to read file:", e);
@@ -128,12 +130,13 @@ export function EditorTab({ path, onSave, onContentChange, onMount }: EditorTabP
         contentRef.current = currentContent;
         isDirtyRef.current = false;
         onSave?.();
+        onContentChange?.(false, currentContent);
       })
       .catch((e) => {
         console.error("Failed to save file:", e);
         setError(`Failed to save file: ${e}`);
       });
-  }, [onSave]);
+  }, [onSave, onContentChange]);
 
   // Store save handler ref for external access
   useEffect(() => {
@@ -170,7 +173,7 @@ export function EditorTab({ path, onSave, onContentChange, onMount }: EditorTabP
     
     const dirty = newContent !== originalContent;
     isDirtyRef.current = dirty;
-    onContentChange?.(dirty);
+    onContentChange?.(dirty, newContent);
   }, [originalContent, onContentChange]);
 
   // Memoize options to prevent recreation

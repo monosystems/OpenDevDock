@@ -26,10 +26,10 @@
 pnpm install
 
 # Develop the app
-pnpm run tauri dev
+pnpm start
 
 # Production build
-pnpm run tauri build
+pnpm tauri build
 ```
 
 ## Tech Stack
@@ -67,7 +67,7 @@ git clone https://github.com/monosystems/OpenDevDock.git
 cd OpenDevDock
 
 pnpm install
-pnpm run tauri dev
+pnpm start
 ```
 
 ### Frontend Only
@@ -83,8 +83,8 @@ pnpm run build   # TypeScript check + production build
 |---------|-------------|
 | `pnpm install` | Install dependencies |
 | `pnpm run dev` | Start Vite dev server |
-| `pnpm run tauri dev` | Start Tauri development build |
-| `pnpm run tauri build` | Build production Tauri app |
+| `pnpm start` | Start Tauri development build |
+| `pnpm tauri build` | Build production Tauri app |
 
 ## Architecture
 

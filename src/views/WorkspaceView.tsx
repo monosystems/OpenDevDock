@@ -1,33 +1,50 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { Project, FileNode } from "../state/types";
+import { Project, FileNode, Session } from "../state/types";
 import { FileTree } from "../components/FileTree";
 import { Terminal } from "../components/Terminal";
 import { EditorTab } from "../components/EditorTab";
 import { useTerminalManager } from "../hooks/useTerminalManager";
+import { ChangesTab } from "../components/ChangesTab";
 import {
   createFile,
   createDirectory,
   renamePath,
   deletePath,
   movePath,
+  readFileContent,
 } from "../commands/fileOperations";
 
 interface WorkspaceViewProps {
   project: Project;
   onClose: () => void;
+  session: Session | null;
+  trackFileCreated: (path: string, name: string) => void;
+  trackFileEdited: (path: string, name: string, originalContent: string) => void;
+  trackFileDeleted: (path: string, name: string, originalContent: string) => void;
+  changedFilePaths: Set<string>;
+  hasChanges: boolean;
 }
 
 interface TabItem {
   id: string;
-  type: "terminal" | "file";
+  type: "terminal" | "file" | "changes";
   title: string;
   path?: string;
   terminalId?: string;
   isDirty?: boolean;
 }
 
-export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
+export function WorkspaceView({
+  project,
+  onClose,
+  session,
+  trackFileCreated,
+  trackFileEdited,
+  trackFileDeleted,
+  changedFilePaths,
+  hasChanges,
+}: WorkspaceViewProps) {
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
   const [treeWidth, setTreeWidth] = useState(260);
@@ -38,6 +55,7 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
   const editorSaveHandlers = useRef<Map<string, () => void>>(new Map());
   const activeTabIdRef = useRef<string | null>(null);
   const tabListRef = useRef<TabItem[]>([]);
+  const originalContentRef = useRef<Map<string, string>>(new Map());
   
   // Keep refs in sync with state
   activeTabIdRef.current = activeTabId;
@@ -135,6 +153,11 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
     const tab = tabListRef.current.find((t) => t.id === tabId);
     if (!tab) return;
     
+    // Changes tab cannot be closed
+    if (tab.type === "changes") {
+      return;
+    }
+    
     // For file tabs with unsaved changes, prompt before closing
     if (tab.type === "file" && tab.isDirty && !force) {
       const confirmed = window.confirm(`${tab.title} has unsaved changes. Close anyway?`);
@@ -191,6 +214,18 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
     }
   }, [createTerminal, project.path]);
 
+  const handleOpenChangesTab = useCallback(() => {
+    const existingTab = tabListRef.current.find((t) => t.type === "changes");
+    if (existingTab) {
+      setActiveTabId(existingTab.id);
+      return;
+    }
+    const newTabId = `changes-${Date.now()}`;
+    const newTab: TabItem = { id: newTabId, type: "changes" as const, title: "Changes" };
+    setTabList((prev) => [...prev, newTab]);
+    setActiveTabId(newTabId);
+  }, []);
+
   const handleRenameTab = useCallback((tabId: string, newTitle: string) => {
     renameTerminal(tabId, newTitle);
     setTabList((prev) =>
@@ -205,12 +240,16 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
   }, [resizeTerminal]);
 
   const handleEditorSave = useCallback((path: string) => {
+    const originalContent = originalContentRef.current.get(path) || "";
+    const name = path.split("/").pop() || path;
+    trackFileEdited(path, name, originalContent);
+    
     setTabList((prev) =>
       prev.map((t) =>
         t.path === path ? { ...t, isDirty: false } : t
       )
     );
-  }, []);
+  }, [trackFileEdited]);
 
   const handleEditorContentChange = useCallback((path: string, isDirty: boolean) => {
     setTabList((prev) =>
@@ -224,19 +263,24 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
     editorSaveHandlers.current.set(path, saveHandler);
   }, []);
 
+  const handleOriginalContentLoaded = useCallback((path: string, content: string) => {
+    originalContentRef.current.set(path, content);
+  }, []);
+
   const handleCreateFile = useCallback(
     async (parentPath: string, name: string) => {
       console.log("[WorkspaceView] handleCreateFile:", parentPath, name);
       try {
         const result = await createFile(parentPath, name);
         console.log("[WorkspaceView] createFile result:", result);
+        trackFileCreated(result.path, name);
         await loadFileTree();
       } catch (e) {
         console.error("Failed to create file:", e);
         alert(`Fehler beim Erstellen der Datei: ${e}`);
       }
     },
-    []
+    [trackFileCreated]
   );
 
   const handleCreateDirectory = useCallback(
@@ -275,6 +319,15 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
   const handleDelete = useCallback(
     async (node: FileNode) => {
       try {
+        if (!node.is_dir) {
+          let originalContent = "";
+          try {
+            originalContent = await readFileContent(node.path);
+          } catch {
+            // File might not exist
+          }
+          trackFileDeleted(node.path, node.name, originalContent);
+        }
         await deletePath(node.path);
         await loadFileTree();
         setTabList((prev) => prev.filter((t) => t.path !== node.path));
@@ -283,7 +336,7 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
         alert(`Fehler beim Löschen: ${e}`);
       }
     },
-    []
+    [trackFileDeleted]
   );
 
   const handleMove = useCallback(
@@ -305,6 +358,11 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
       <div className="app-header">
         <button onClick={onClose}>← Back</button>
         <span>{project.name}</span>
+        {session && (
+          <span className="session-name" title={session.name}>
+            | Session: {session.name}
+          </span>
+        )}
       </div>
       <div className="app-content">
         <div className="file-tree" style={{ width: treeWidth }}>
@@ -327,6 +385,7 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
               onMove={handleMove}
               rootPath={project.path}
               onRootDragOverChange={setRootDragOver}
+              changedFilePaths={changedFilePaths}
             />
           </div>
         </div>
@@ -350,23 +409,34 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
                   }}
                 >
                   <span className="tab-icon">
-                    {tab.type === "terminal" ? ">" : "📄"}
+                    {tab.type === "terminal" ? ">" : tab.type === "changes" ? "◆" : "📄"}
                   </span>
                   <span className="tab-title">
                     {tab.isDirty && <span className="tab-dirty-indicator">●</span>}
                     {tab.title}
                   </span>
-                  <button
-                    className="tab-close"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCloseTab(tab.id);
-                    }}
-                  >
-                    ×
-                  </button>
+                  {tab.type !== "changes" && (
+                    <button
+                      className="tab-close"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCloseTab(tab.id);
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
                 </div>
               ))}
+              {hasChanges && (
+                <button
+                  className="tab-add changes-tab-btn"
+                  onClick={handleOpenChangesTab}
+                  title="Show Changes"
+                >
+                  ◆ Changes
+                </button>
+              )}
             </div>
             <button className="tab-add" onClick={handleAddTerminal}>
               +
@@ -390,9 +460,17 @@ export function WorkspaceView({ project, onClose }: WorkspaceViewProps) {
                     <EditorTab 
                       path={tab.path} 
                       onSave={() => handleEditorSave(tab.path!)}
-                      onContentChange={(isDirty) => handleEditorContentChange(tab.path!, isDirty)}
+                      onContentChange={(_isDirty, _content) => handleEditorContentChange(tab.path!, _isDirty)}
                       onMount={(saveHandler) => handleEditorMount(tab.path!, saveHandler)}
+                      onOriginalContentLoaded={(content) => handleOriginalContentLoaded(tab.path!, content)}
                     />
+                  </div>
+                );
+              }
+              if (tab.type === "changes" && tab.id === activeTabId && session) {
+                return (
+                  <div key={tab.id} style={{ display: 'block', height: '100%', position: 'relative' }}>
+                    <ChangesTab session={session} />
                   </div>
                 );
               }

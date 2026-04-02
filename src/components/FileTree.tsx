@@ -15,9 +15,10 @@ interface FileTreeProps {
   level?: number;
   rootPath?: string;
   onRootDragOverChange?: (isOver: boolean) => void;
+  changedFilePaths?: Set<string>;
 }
 
-export function FileTree({ nodes, onFileClick, onCreateFile, onCreateDirectory, onRename, onDelete, onMove, level = 0, rootPath, onRootDragOverChange }: FileTreeProps) {
+export function FileTree({ nodes, onFileClick, onCreateFile, onCreateDirectory, onRename, onDelete, onMove, level = 0, rootPath, onRootDragOverChange, changedFilePaths = new Set() }: FileTreeProps) {
   const [clipboardInfo, setClipboardInfo] = useState<{ node: FileNode; action: "cut" | "copy" } | null>(null);
 
   console.log("[FILETREE DEBUG V3 LOADED] level=", level, "nodes=", nodes.length);
@@ -84,6 +85,7 @@ export function FileTree({ nodes, onFileClick, onCreateFile, onCreateDirectory, 
           level={level}
           rootPath={rootPath}
           onRootDragOverChange={onRootDragOverChange}
+          changedFilePaths={changedFilePaths}
         />
       ))}
     </div>
@@ -105,6 +107,7 @@ interface FileTreeNodeProps {
   level: number;
   rootPath?: string;
   onRootDragOverChange?: (isOver: boolean) => void;
+  changedFilePaths?: Set<string>;
 }
 
 function FileTreeNode({
@@ -122,6 +125,7 @@ function FileTreeNode({
   level,
   rootPath,
   onRootDragOverChange,
+  changedFilePaths = new Set(),
 }: FileTreeNodeProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
@@ -478,7 +482,7 @@ function FileTreeNode({
   return (
     <div>
       <div
-        className={`file-node ${node.is_dir ? "file-node-dir" : "file-node-file"} ${isPointerDragging && currentPointerDragSourceRef.current === node.path ? 'dragging' : ''} ${pointerDragOverPath === node.path ? 'file-node-drag-over' : ''}`}
+        className={`file-node ${node.is_dir ? "file-node-dir" : "file-node-file"} ${isPointerDragging && currentPointerDragSourceRef.current === node.path ? 'dragging' : ''} ${pointerDragOverPath === node.path ? 'file-node-drag-over' : ''} ${changedFilePaths.has(node.path) ? 'changed' : ''}`}
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
@@ -635,6 +639,7 @@ function FileTreeNode({
           onDelete={onDelete}
           onMove={onMove}
           level={level + 1}
+          changedFilePaths={changedFilePaths}
         />
       )}
     </div>

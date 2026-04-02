@@ -35,3 +35,24 @@ export interface FileTab extends Tab {
   type: "file";
   content: string;
 }
+
+export type ChangeType = "created" | "edited" | "deleted";
+
+export interface ChangedFile {
+  path: string;
+  name: string;
+  changeType: ChangeType;
+  originalContent: string | null;
+  currentContent: string | null;
+  timestamp: number;
+}
+
+export interface Session {
+  id: string;
+  projectPath: string;
+  projectName: string;
+  createdAt: number;
+  name: string;
+  changedFiles: ChangedFile[];
+}
+

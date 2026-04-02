@@ -4,6 +4,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { StartView } from "./views/StartView";
 import { WorkspaceView } from "./views/WorkspaceView";
 import { AppState, Project } from "./state/types";
+import { useSession } from "./hooks/useSession";
 
 function App() {
   const [appState, setAppState] = useState<AppState>({
@@ -11,6 +12,17 @@ function App() {
     projects: [],
     activeProject: null,
   });
+
+  const {
+    activeSession,
+    createSession,
+    clearSession,
+    trackFileCreated,
+    trackFileEdited,
+    trackFileDeleted,
+    getChangedFilePaths,
+    hasChanges,
+  } = useSession();
 
   useEffect(() => {
     const saved = localStorage.getItem("opendevdock_projects");
@@ -62,12 +74,13 @@ function App() {
   }, [saveProjects]);
 
   const handleOpenProject = useCallback((project: Project) => {
+    createSession(project);
     setAppState((prev) => ({
       ...prev,
       view: "workspace",
       activeProject: project,
     }));
-  }, []);
+  }, [createSession]);
 
   const handleRemoveProject = useCallback(
     (projectPath: string) => {
@@ -81,18 +94,25 @@ function App() {
   );
 
   const handleCloseWorkspace = useCallback(() => {
+    clearSession();
     setAppState((prev) => ({
       ...prev,
       view: "start",
       activeProject: null,
     }));
-  }, []);
+  }, [clearSession]);
 
   if (appState.view === "workspace" && appState.activeProject) {
     return (
       <WorkspaceView
         project={appState.activeProject}
         onClose={handleCloseWorkspace}
+        session={activeSession}
+        trackFileCreated={trackFileCreated}
+        trackFileEdited={trackFileEdited}
+        trackFileDeleted={trackFileDeleted}
+        changedFilePaths={getChangedFilePaths()}
+        hasChanges={hasChanges ?? false}
       />
     );
   }

@@ -24,8 +24,8 @@ pnpm run build        # TypeScript check + Vite production build
 pnpm run preview      # Preview production build
 
 # Tauri (full app)
-pnpm run tauri dev    # Start Tauri development build
-pnpm run tauri build  # Build production Tauri app
+pnpm start            # Start Tauri development build
+pnpm tauri build      # Build production Tauri app
 
 # Run a single test (if tests are added)
 pnpm vitest run src/components/Terminal.test.ts
