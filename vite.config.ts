@@ -24,4 +24,10 @@ export default defineConfig(async () => ({
   optimizeDeps: {
     exclude: ["@monaco-editor/react", "monaco-editor"],
   },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.ts"],
+    css: true,
+  },
 }));
