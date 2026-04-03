@@ -423,23 +423,33 @@ loader.init()
 | 9 | WorkspaceView aufteilen | 3-4 h | ✅ Erledigt |
 | 10 | Inline Tab Rename | 2 h | ✅ Erledigt |
 | 11 | Auto-Save Option | 3 h | ✅ Erledigt |
+| 12 | Unit Tests | 2 h | ✅ Erledigt |
 
 ---
 
 ## 8. Testing Anforderungen
 
-### 8.1 Unit Tests
-- `useSession` Hook
-- `useTerminalManager` Hook
-- `computeDiff` in ChangesTab
-- File Operations Helper
+### 8.1 Unit Tests (✅ Implementiert)
 
-### 8.2 Integration Tests
+| Testdatei | Tests | Abdeckung |
+|-----------|-------|-----------|
+| `src/utils/diff.test.ts` | 16 | `computeDiff`, `getChangeTypeLabel`, `getChangeTypeIcon` |
+| `src/hooks/useSession.test.ts` | 10 | `getStorageKey`, `loadSessionsFromStorage`, `saveSessionsToStorage` |
+| `src/commands/fileOperations.test.ts` | 12 | Alle Tauri-Command-Wrapper |
+
+**Testausführung:**
+```bash
+pnpm vitest run src/utils/diff.test.ts
+pnpm vitest run src/hooks/useSession.test.ts
+pnpm vitest run src/commands/fileOperations.test.ts
+```
+
+### 8.2 Integration Tests (Geplant)
 - Tab-Öffnen/Schließen
 - FileTree CRUD-Operationen
 - Session-Erstellung und -Wiederherstellung
 
-### 8.3 E2E Tests (zukünftig)
+### 8.3 E2E Tests (Zukünftig)
 - Projekt öffnen → Datei editieren → speichern
 - Terminal bedienen
 - Session-Historie durchsuchen

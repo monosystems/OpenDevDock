@@ -4,11 +4,11 @@ import { readFileContent, getGitBranch } from "../commands/fileOperations";
 
 export const MAX_SESSIONS_DISPLAY = 3;
 
-function getStorageKey(projectPath: string): string {
+export function getStorageKey(projectPath: string): string {
   return `opendevdock_sessions_${encodeURIComponent(projectPath)}`;
 }
 
-function loadSessionsFromStorage(projectPath: string): Session[] {
+export function loadSessionsFromStorage(projectPath: string): Session[] {
   try {
     const saved = localStorage.getItem(getStorageKey(projectPath));
     if (saved) {
@@ -20,7 +20,7 @@ function loadSessionsFromStorage(projectPath: string): Session[] {
   return [];
 }
 
-function saveSessionsToStorage(projectPath: string, sessions: Session[]): void {
+export function saveSessionsToStorage(projectPath: string, sessions: Session[]): void {
   try {
     localStorage.setItem(getStorageKey(projectPath), JSON.stringify(sessions));
   } catch (e: unknown) {
