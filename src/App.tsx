@@ -6,6 +6,9 @@ import { WorkspaceView } from "./views/WorkspaceView";
 import { AppState, Project, Session } from "./state/types";
 import { useSession } from "./hooks/useSession";
 import { ClipboardProvider } from "./contexts/ClipboardContext";
+import { ToastProvider } from "./contexts/ToastContext";
+import { ToastContainer } from "./components/ui/Toast";
+import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 
 function App() {
   const [appState, setAppState] = useState<AppState>({
@@ -132,34 +135,44 @@ function App() {
 
   if (appState.view === "workspace" && appState.activeProject) {
     return (
-      <ClipboardProvider>
-        <WorkspaceView
-          project={appState.activeProject}
-          onClose={handleCloseWorkspace}
-          session={activeSession}
-          trackFileCreated={trackFileCreated}
-          trackFileEdited={trackFileEdited}
-          trackFileDeleted={trackFileDeleted}
-          trackDirectoryDeleted={trackDirectoryDeleted}
-          changedFilePaths={getChangedFilePaths()}
-          hasChanges={hasChanges ?? false}
-          openInChangesView={sessionFromHistory !== null}
-        />
-      </ClipboardProvider>
+      <ToastProvider>
+        <ClipboardProvider>
+          <ErrorBoundary>
+            <WorkspaceView
+              project={appState.activeProject}
+              onClose={handleCloseWorkspace}
+              session={activeSession}
+              trackFileCreated={trackFileCreated}
+              trackFileEdited={trackFileEdited}
+              trackFileDeleted={trackFileDeleted}
+              trackDirectoryDeleted={trackDirectoryDeleted}
+              changedFilePaths={getChangedFilePaths()}
+              hasChanges={hasChanges ?? false}
+              openInChangesView={sessionFromHistory !== null}
+            />
+          </ErrorBoundary>
+        </ClipboardProvider>
+        <ToastContainer />
+      </ToastProvider>
     );
   }
 
   return (
-    <StartView
-      projects={appState.projects}
-      onAddProject={handleAddProject}
-      onOpenProject={handleOpenProject}
-      onRemoveProject={handleRemoveProject}
-      sessionsByProject={sessionsByProject}
-      onOpenSession={handleOpenSession}
-      onDeleteSession={deleteSession}
-      onUpdateSessionName={updateSessionName}
-    />
+    <ToastProvider>
+      <ErrorBoundary>
+        <StartView
+          projects={appState.projects}
+          onAddProject={handleAddProject}
+          onOpenProject={handleOpenProject}
+          onRemoveProject={handleRemoveProject}
+          sessionsByProject={sessionsByProject}
+          onOpenSession={handleOpenSession}
+          onDeleteSession={deleteSession}
+          onUpdateSessionName={updateSessionName}
+        />
+      </ErrorBoundary>
+      <ToastContainer />
+    </ToastProvider>
   );
 }
 
