@@ -72,7 +72,7 @@ export function useTerminalManager() {
         });
 
         return { id: terminalId, terminalId };
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to create terminal:", e);
         throw e;
       }
@@ -86,7 +86,7 @@ export function useTerminalManager() {
 
     try {
       await invoke("close_terminal", { id: info.terminalId });
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to close terminal:", e);
     }
 
@@ -112,7 +112,7 @@ export function useTerminalManager() {
         id: info.terminalId,
         data,
       });
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to write to terminal:", e);
     }
   }, [terminals]);
@@ -127,7 +127,7 @@ export function useTerminalManager() {
         cols,
         rows,
       });
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to resize terminal:", e);
     }
   }, [terminals]);

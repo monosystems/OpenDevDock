@@ -14,7 +14,7 @@ function loadSessionsFromStorage(projectPath: string): Session[] {
     if (saved) {
       return JSON.parse(saved);
     }
-  } catch (e) {
+  } catch (e: unknown) {
     console.error("Failed to load sessions from storage:", e);
   }
   return [];
@@ -23,7 +23,7 @@ function loadSessionsFromStorage(projectPath: string): Session[] {
 function saveSessionsToStorage(projectPath: string, sessions: Session[]): void {
   try {
     localStorage.setItem(getStorageKey(projectPath), JSON.stringify(sessions));
-  } catch (e) {
+  } catch (e: unknown) {
     console.error("Failed to save sessions to storage:", e);
   }
 }
@@ -116,7 +116,7 @@ export function useSession() {
     if (changeType !== "deleted") {
       try {
         currentContent = await readFileContent(path);
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to read current content:", e);
       }
     }
