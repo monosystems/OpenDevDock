@@ -5,6 +5,7 @@ import { StartView } from "./views/StartView";
 import { WorkspaceView } from "./views/WorkspaceView";
 import { AppState, Project, Session } from "./state/types";
 import { useSession } from "./hooks/useSession";
+import { ClipboardProvider } from "./contexts/ClipboardContext";
 
 function App() {
   const [appState, setAppState] = useState<AppState>({
@@ -131,18 +132,20 @@ function App() {
 
   if (appState.view === "workspace" && appState.activeProject) {
     return (
-      <WorkspaceView
-        project={appState.activeProject}
-        onClose={handleCloseWorkspace}
-        session={activeSession}
-        trackFileCreated={trackFileCreated}
-        trackFileEdited={trackFileEdited}
-        trackFileDeleted={trackFileDeleted}
-        trackDirectoryDeleted={trackDirectoryDeleted}
-        changedFilePaths={getChangedFilePaths()}
-        hasChanges={hasChanges ?? false}
-        openInChangesView={sessionFromHistory !== null}
-      />
+      <ClipboardProvider>
+        <WorkspaceView
+          project={appState.activeProject}
+          onClose={handleCloseWorkspace}
+          session={activeSession}
+          trackFileCreated={trackFileCreated}
+          trackFileEdited={trackFileEdited}
+          trackFileDeleted={trackFileDeleted}
+          trackDirectoryDeleted={trackDirectoryDeleted}
+          changedFilePaths={getChangedFilePaths()}
+          hasChanges={hasChanges ?? false}
+          openInChangesView={sessionFromHistory !== null}
+        />
+      </ClipboardProvider>
     );
   }
 

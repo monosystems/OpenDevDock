@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { Project, FileNode, Session } from "../state/types";
 import { FileTree } from "../components/FileTree";
-import { Terminal } from "../components/Terminal";
-import { EditorTab } from "../components/EditorTab";
 import { useTerminalManager } from "../hooks/useTerminalManager";
-import { ChangesTab } from "../components/ChangesTab";
+import { TabBar } from "../components/TabBar";
+import { TabContent } from "../components/TabContent";
+import { Resizer } from "../components/Resizer";
+
 import {
   createFile,
   createDirectory,
@@ -28,7 +29,7 @@ interface WorkspaceViewProps {
   openInChangesView?: boolean;
 }
 
-interface TabItem {
+export interface TabItem {
   id: string;
   type: "terminal" | "file" | "changes";
   title: string;
@@ -128,20 +129,9 @@ export function WorkspaceView({
     }
   };
 
-  const handleMouseDown = useCallback(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  }, []);
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    const newWidth = Math.max(200, Math.min(400, e.clientX));
+  const handleTreeResize = useCallback((newWidth: number) => {
     setTreeWidth(newWidth);
   }, []);
-
-  const handleMouseUp = useCallback(() => {
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-  }, [handleMouseMove]);
 
   const handleFileClick = useCallback((node: FileNode) => {
     if (node.is_dir) return;
@@ -363,9 +353,6 @@ export function WorkspaceView({
     []
   );
 
-  const changesTab = tabList.find(t => t.type === "changes");
-  const otherTabs = tabList.filter(t => t.type !== "changes");
-
   return (
     <div className="app-container">
       <div className="app-header">
@@ -402,105 +389,28 @@ export function WorkspaceView({
             />
           </div>
         </div>
-        <div
-          className="resizer"
-          onMouseDown={handleMouseDown}
-        />
+        <Resizer onResize={handleTreeResize} />
         <div className="main-area">
-          <div className="tabs-container">
-            <div className="tabs-list">
-              <div className="tabs-left">
-                {otherTabs.map((tab) => (
-                  <div
-                    key={tab.id}
-                    className={`tab ${tab.id === activeTabId ? "active" : ""}`}
-                    onClick={() => setActiveTabId(tab.id)}
-                    onDoubleClick={() => {
-                      if (tab.type === "terminal") {
-                        const newTitle = prompt("Rename tab:", tab.title);
-                        if (newTitle) handleRenameTab(tab.id, newTitle);
-                      }
-                    }}
-                  >
-                    <span className="tab-icon">
-                      {tab.type === "terminal" ? ">" : "📄"}
-                    </span>
-                    <span className="tab-title">
-                      {tab.isDirty && <span className="tab-dirty-indicator">●</span>}
-                      {tab.title}
-                    </span>
-                    <button
-                      className="tab-close"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCloseTab(tab.id);
-                      }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <div className="tabs-right">
-                {hasChanges && !changesTab && (
-                  <button
-                    className="tab-add changes-tab-btn"
-                    onClick={handleOpenChangesTab}
-                    title="Show Changes"
-                  >
-                    ◆ Changes
-                  </button>
-                )}
-                {changesTab && (
-                  <div
-                    className={`tab changes-tab ${changesTab.id === activeTabId ? "active" : ""}`}
-                    onClick={() => setActiveTabId(changesTab.id)}
-                  >
-                    <span className="tab-icon">◆</span>
-                    <span className="tab-title">Changes</span>
-                  </div>
-                )}
-              </div>
-            </div>
-            <button className="tab-add" onClick={handleAddTerminal}>
-              +
-            </button>
-          </div>
-          <div className="tab-content">
-            {tabList.map((tab) => {
-              if (tab.type === "terminal") {
-                return (
-                  <div key={tab.id} style={{ display: tab.id === activeTabId ? 'block' : 'none', height: '100%', position: 'relative' }}>
-                    <Terminal
-                      terminalId={tab.id}
-                      onResize={(cols, rows) => handleTerminalResize(tab.id, cols, rows)}
-                    />
-                  </div>
-                );
-              }
-              if (tab.type === "file" && tab.path && tab.id === activeTabId) {
-                return (
-                  <div key={tab.id} style={{ display: 'block', height: '100%', position: 'relative' }}>
-                    <EditorTab 
-                      path={tab.path} 
-                      onSave={() => handleEditorSave(tab.path!)}
-                      onContentChange={(_isDirty, _content) => handleEditorContentChange(tab.path!, _isDirty)}
-                      onMount={(saveHandler) => handleEditorMount(tab.path!, saveHandler)}
-                      onOriginalContentLoaded={(content) => handleOriginalContentLoaded(tab.path!, content)}
-                    />
-                  </div>
-                );
-              }
-              if (tab.type === "changes" && tab.id === activeTabId && session) {
-                return (
-                  <div key={tab.id} style={{ display: 'block', height: '100%', position: 'relative' }}>
-                    <ChangesTab session={session} />
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </div>
+          <TabBar
+            tabs={tabList}
+            activeTabId={activeTabId}
+            onTabSelect={setActiveTabId}
+            onTabClose={handleCloseTab}
+            onTabRename={handleRenameTab}
+            onAddTerminal={handleAddTerminal}
+            hasChanges={hasChanges}
+            onOpenChangesTab={handleOpenChangesTab}
+          />
+          <TabContent
+            tabs={tabList}
+            activeTabId={activeTabId}
+            session={session}
+            onTerminalResize={handleTerminalResize}
+            onEditorSave={handleEditorSave}
+            onEditorContentChange={handleEditorContentChange}
+            onEditorMount={handleEditorMount}
+            onOriginalContentLoaded={handleOriginalContentLoaded}
+          />
         </div>
       </div>
     </div>
