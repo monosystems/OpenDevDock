@@ -53,9 +53,13 @@ export function Terminal({ terminalId, onResize }: TerminalProps) {
     }
     
     if (!instance.term) {
+      const fontSize = parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue("--terminal-font-size") || "14",
+        10
+      );
       const term = new XTerm({
         cursorBlink: true,
-        fontSize: 14,
+        fontSize: isNaN(fontSize) ? 14 : fontSize,
         fontFamily: "'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace",
         theme: {
           background: "#000000",

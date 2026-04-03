@@ -115,7 +115,7 @@ export function WorkspaceView({
         { id, type: "terminal" as const, title: "Terminal", terminalId: id },
       ]);
       setActiveTabId(id);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to create initial terminal:", e);
     }
   };
@@ -126,7 +126,7 @@ export function WorkspaceView({
         path: project.path,
       });
       setFileTree(result);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to load file tree:", e);
       setFileTree([]);
     }
@@ -213,7 +213,7 @@ export function WorkspaceView({
       const newTab: TabItem = { id, type: "terminal" as const, title: "Terminal", terminalId: id };
       setTabList((prev) => [...prev, newTab]);
       setActiveTabId(id);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to create terminal:", e);
     }
   }, [createTerminal, project.path]);
@@ -277,9 +277,9 @@ export function WorkspaceView({
         const result = await createFile(parentPath, name);
         trackFileCreated(result.path, name);
         await loadFileTree();
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to create file:", e);
-        toast.error(`Fehler beim Erstellen der Datei: ${e}`);
+        toast.error(e instanceof Error ? `Fehler beim Erstellen der Datei: ${e.message}` : "Fehler beim Erstellen der Datei");
       }
     },
     [trackFileCreated]
@@ -290,9 +290,9 @@ export function WorkspaceView({
       try {
         await createDirectory(parentPath, name);
         await loadFileTree();
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to create directory:", e);
-        toast.error(`Fehler beim Erstellen des Ordners: ${e}`);
+        toast.error(e instanceof Error ? `Fehler beim Erstellen des Ordners: ${e.message}` : "Fehler beim Erstellen des Ordners");
       }
     },
     []
@@ -310,9 +310,9 @@ export function WorkspaceView({
               : t
           )
         );
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to rename:", e);
-        toast.error(`Fehler beim Umbenennen: ${e}`);
+        toast.error(e instanceof Error ? `Fehler beim Umbenennen: ${e.message}` : "Fehler beim Umbenennen");
       }
     },
     []
@@ -335,9 +335,9 @@ export function WorkspaceView({
         await deletePath(node.path);
         await loadFileTree();
         setTabList((prev) => prev.filter((t) => t.path !== node.path));
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to delete:", e);
-        toast.error(`Fehler beim Löschen: ${e}`);
+        toast.error(e instanceof Error ? `Fehler beim Löschen: ${e.message}` : "Fehler beim Löschen");
       }
     },
     [trackFileDeleted, trackDirectoryDeleted]
@@ -348,9 +348,9 @@ export function WorkspaceView({
       try {
         await movePath(sourcePath, destDir);
         await loadFileTree();
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to move:", e);
-        toast.error(`Fehler beim Verschieben: ${e}`);
+        toast.error(e instanceof Error ? `Fehler beim Verschieben: ${e.message}` : "Fehler beim Verschieben");
       }
     },
     []

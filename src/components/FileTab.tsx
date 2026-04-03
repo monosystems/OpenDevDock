@@ -17,9 +17,9 @@ export function FileTab({ path }: FileTabProps) {
       try {
         const text = await readTextFile(path);
         setContent(text);
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to read file:", e);
-        setError(`Failed to load file: ${e}`);
+        setError(e instanceof Error ? `Failed to load file: ${e.message}` : "Failed to load file");
         setContent("");
       } finally {
         setLoading(false);

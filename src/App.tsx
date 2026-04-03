@@ -45,7 +45,7 @@ function App() {
         projects.forEach((project: Project) => {
           loadSessionsForProject(project.path);
         });
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to load saved projects:", e);
       }
     }
@@ -83,7 +83,7 @@ function App() {
           return { ...prev, projects: newProjects };
         });
       }
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Failed to add project:", e);
     }
   }, [saveProjects]);
