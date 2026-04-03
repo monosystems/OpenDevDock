@@ -286,7 +286,7 @@ export function SessionHistoryList({
               <button className="session-modal-close" onClick={handleCancelDelete}>×</button>
             </div>
             <div className="session-modal-content" style={{ padding: "20px" }}>
-              <p style={{ marginBottom: "20px", color: "var(--text-primary)" }}>
+              <p style={{ marginBottom: "20px", color: "var(--on-surface)" }}>
                 Delete session <strong>"{confirmDelete.sessionName}"</strong>?<br />
                 This cannot be undone.
               </p>

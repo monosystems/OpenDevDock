@@ -24,13 +24,16 @@ export function StartView({
 }: StartViewProps) {
   return (
     <div className="start-view">
-      <h1>OpenDevDock</h1>
-      <p>Select a project to open your workspace</p>
+      <div className="start-view-header">
+        <h1>OpenDevDock</h1>
+        <p className="start-view-subtitle">Select a project to open your workspace</p>
+      </div>
 
       {projects.length === 0 ? (
         <div className="empty-state">
-          <p>No projects added yet.</p>
-          <p>Add a local folder to get started.</p>
+          <div className="empty-state-icon">📁</div>
+          <p>No projects added yet</p>
+          <p>Add a local folder to get started</p>
         </div>
       ) : (
         <div className="project-list">
