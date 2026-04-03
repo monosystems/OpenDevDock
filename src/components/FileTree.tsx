@@ -1,8 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileNode } from "../state/types";
-
-let clipboardNode: FileNode | null = null;
-let clipboardAction: "cut" | "copy" | null = null;
+import { useClipboard } from "../contexts/ClipboardContext";
 
 interface FileTreeProps {
   nodes: FileNode[];
@@ -19,45 +17,23 @@ interface FileTreeProps {
 }
 
 export function FileTree({ nodes, onFileClick, onCreateFile, onCreateDirectory, onRename, onDelete, onMove, level = 0, rootPath, onRootDragOverChange, changedFilePaths = new Set() }: FileTreeProps) {
-  const [clipboardInfo, setClipboardInfo] = useState<{ node: FileNode; action: "cut" | "copy" } | null>(null);
-
-  useEffect(() => {
-    const count = document.querySelectorAll(".file-node").length;
-    console.log("[FILETREE] .file-node count after mount:", count);
-
-    const updateClipboard = () => {
-      if (clipboardNode && clipboardAction) {
-        setClipboardInfo({ node: clipboardNode, action: clipboardAction });
-      } else {
-        setClipboardInfo(null);
-      }
-    };
-    const interval = setInterval(updateClipboard, 500);
-    return () => clearInterval(interval);
-  }, []);
+  const { node: clipboardNode, action: clipboardAction, cut, copy, paste } = useClipboard();
+  const clipboardInfo = clipboardNode && clipboardAction ? { node: clipboardNode, action: clipboardAction } : null;
 
   const handleCut = useCallback((node: FileNode) => {
-    clipboardNode = node;
-    clipboardAction = "cut";
-    setClipboardInfo({ node, action: "cut" });
-  }, []);
+    cut(node);
+  }, [cut]);
 
   const handleCopy = useCallback((node: FileNode) => {
-    clipboardNode = node;
-    clipboardAction = "copy";
-    setClipboardInfo({ node, action: "copy" });
-  }, []);
+    copy(node);
+  }, [copy]);
 
   const handlePaste = useCallback((destDir: FileNode) => {
-    if (clipboardNode && clipboardAction && destDir.is_dir) {
-      onMove(clipboardNode.path, destDir.path);
-      if (clipboardAction === "cut") {
-        clipboardNode = null;
-        clipboardAction = null;
-        setClipboardInfo(null);
-      }
+    const result = paste(destDir);
+    if (result) {
+      onMove(result.sourcePath, result.destDir);
     }
-  }, [onMove]);
+  }, [paste, onMove]);
 
   return (
     <div>
