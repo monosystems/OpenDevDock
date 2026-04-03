@@ -506,6 +506,17 @@ input:focus {
   align-items: center;
   flex: 1;
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-container-highest) transparent;
+}
+
+.tabs-list::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tabs-list::-webkit-scrollbar-thumb {
+  background: var(--surface-container-highest);
+  border-radius: 2px;
 }
 
 .tabs-left {
@@ -576,6 +587,23 @@ input:focus {
 .tab-add:hover {
   background: var(--surface-container-highest);
   color: var(--on-surface);
+}
+
+/* Tab Rename Input */
+.tab-rename-input {
+  padding: 2px 4px;
+  font-size: 13px;
+  background: var(--surface-container-highest);
+  border: none;
+  border-radius: 2px;
+  color: var(--on-surface);
+  min-width: 80px;
+  max-width: 150px;
+}
+
+.tab-rename-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--primary);
 }
 
 /* Tab Content */

@@ -44,6 +44,8 @@ interface EditorTabProps {
   onContentChange?: (isDirty: boolean, content: string) => void;
   onMount?: (saveHandler: () => void) => void;
   onOriginalContentLoaded?: (content: string) => void;
+  autoSave?: boolean;
+  autoSaveDelay?: number;
 }
 
 // Map file extensions to Monaco language IDs
@@ -100,7 +102,15 @@ function getLanguageFromPath(filePath: string): string {
   return languageMap[ext] || "plaintext";
 }
 
-export function EditorTab({ path, onSave, onContentChange, onMount, onOriginalContentLoaded }: EditorTabProps) {
+export function EditorTab({ 
+  path, 
+  onSave, 
+  onContentChange, 
+  onMount, 
+  onOriginalContentLoaded,
+  autoSave = false,
+  autoSaveDelay = 2000,
+}: EditorTabProps) {
   // State hooks - always called in same order
   const [content, setContent] = useState<string>("");
   const [originalContent, setOriginalContent] = useState<string>("");
@@ -113,6 +123,7 @@ export function EditorTab({ path, onSave, onContentChange, onMount, onOriginalCo
   const isDirtyRef = useRef(false);
   const saveHandlerRef = useRef<(() => void) | null>(null);
   const pathRef = useRef(path);
+  const autoSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Keep path ref updated
   pathRef.current = path;
@@ -209,7 +220,27 @@ export function EditorTab({ path, onSave, onContentChange, onMount, onOriginalCo
     const dirty = newContent !== originalContent;
     isDirtyRef.current = dirty;
     onContentChange?.(dirty, newContent);
-  }, [originalContent, onContentChange]);
+
+    if (autoSave && dirty) {
+      if (autoSaveRef.current) {
+        clearTimeout(autoSaveRef.current);
+      }
+      autoSaveRef.current = setTimeout(() => {
+        if (saveHandlerRef.current) {
+          saveHandlerRef.current();
+        }
+      }, autoSaveDelay);
+    }
+  }, [originalContent, onContentChange, autoSave, autoSaveDelay]);
+
+  // Cleanup auto-save timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveRef.current) {
+        clearTimeout(autoSaveRef.current);
+      }
+    };
+  }, []);
 
   // Memoize options to prevent recreation
   const editorOptions = {
