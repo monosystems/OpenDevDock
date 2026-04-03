@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { TabItem } from "../views/WorkspaceView";
 
 interface TabBarProps {
@@ -21,6 +22,45 @@ export function TabBar({
   hasChanges,
   onOpenChangesTab,
 }: TabBarProps) {
+  const [editingTabId, setEditingTabId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editingTabId && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [editingTabId]);
+
+  const handleStartEdit = (tabId: string, currentTitle: string) => {
+    setEditingTabId(tabId);
+    setEditingTitle(currentTitle);
+  };
+
+  const handleFinishEdit = () => {
+    if (editingTabId && editingTitle.trim()) {
+      onTabRename(editingTabId, editingTitle.trim());
+    }
+    setEditingTabId(null);
+    setEditingTitle("");
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTabId(null);
+    setEditingTitle("");
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleFinishEdit();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      handleCancelEdit();
+    }
+  };
+
   const changesTab = tabs.find((t) => t.type === "changes");
   const otherTabs = tabs.filter((t) => t.type !== "changes");
 
@@ -37,11 +77,10 @@ export function TabBar({
               aria-controls={`panel-${tab.id}`}
               tabIndex={tab.id === activeTabId ? 0 : -1}
               className={`tab ${tab.id === activeTabId ? "active" : ""}`}
-              onClick={() => onTabSelect(tab.id)}
+              onClick={() => !editingTabId && onTabSelect(tab.id)}
               onDoubleClick={() => {
                 if (tab.type === "terminal") {
-                  const newTitle = prompt("Rename tab:", tab.title);
-                  if (newTitle) onTabRename(tab.id, newTitle);
+                  handleStartEdit(tab.id, tab.title);
                 }
               }}
               onKeyDown={(e) => {
@@ -54,10 +93,23 @@ export function TabBar({
               <span className="tab-icon">
                 {tab.type === "terminal" ? ">" : "📄"}
               </span>
-              <span className="tab-title">
-                {tab.isDirty && <span className="tab-dirty-indicator">●</span>}
-                {tab.title}
-              </span>
+              {editingTabId === tab.id ? (
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="tab-rename-input"
+                  value={editingTitle}
+                  onChange={(e) => setEditingTitle(e.target.value)}
+                  onBlur={handleFinishEdit}
+                  onKeyDown={handleInputKeyDown}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <span className="tab-title">
+                  {tab.isDirty && <span className="tab-dirty-indicator">●</span>}
+                  {tab.title}
+                </span>
+              )}
               <button
                 className="tab-close"
                 onClick={(e) => {
