@@ -56,28 +56,28 @@ export function Terminal({ terminalId, onResize }: TerminalProps) {
       const term = new XTerm({
         cursorBlink: true,
         fontSize: 14,
-        fontFamily: "Menlo, Monaco, 'Courier New', monospace",
+        fontFamily: "'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace",
         theme: {
-          background: "#1e1e1e",
-          foreground: "#cccccc",
-          cursor: "#cccccc",
-          cursorAccent: "#1e1e1e",
-          selectionBackground: "#264f78",
+          background: "#000000",
+          foreground: "#dee5ff",
+          cursor: "#39FF14",
+          cursorAccent: "#000000",
+          selectionBackground: "rgba(57, 255, 20, 0.2)",
           black: "#000000",
-          red: "#f14c4c",
-          green: "#89d185",
+          red: "#ff4444",
+          green: "#39FF14",
           yellow: "#e5c07b",
-          blue: "#0e639c",
-          magenta: "#c586c0",
-          cyan: "#89d185",
-          white: "#cccccc",
-          brightBlack: "#858585",
-          brightRed: "#f14c4c",
-          brightGreen: "#89d185",
+          blue: "#69daff",
+          magenta: "#ac89ff",
+          cyan: "#00cffc",
+          white: "#dee5ff",
+          brightBlack: "#8b95b0",
+          brightRed: "#ff6666",
+          brightGreen: "#69FF14",
           brightYellow: "#e5c07b",
-          brightBlue: "#1177bb",
-          brightMagenta: "#c586c0",
-          brightCyan: "#89d185",
+          brightBlue: "#69daff",
+          brightMagenta: "#ac89ff",
+          brightCyan: "#00cffc",
           brightWhite: "#ffffff",
         },
       });
@@ -100,7 +100,6 @@ export function Terminal({ terminalId, onResize }: TerminalProps) {
       });
       
       term.onData((data) => {
-        console.log("[Terminal] onData:", JSON.stringify({ id: terminalId, data }));
         invoke("write_terminal", { id: terminalId, data }).catch((e) => console.error("[Terminal] write_terminal error:", e));
       });
     }
@@ -120,6 +119,11 @@ export function Terminal({ terminalId, onResize }: TerminalProps) {
 
     return () => {
       resizeObserver.disconnect();
+      if (instance.unlisten) {
+        instance.unlisten();
+      }
+      terminalRegistry.delete(terminalId);
+      openedTerminals.delete(terminalId);
     };
   }, [terminalId, onResize, handleResize]);
 

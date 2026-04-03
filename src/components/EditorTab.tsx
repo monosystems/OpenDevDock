@@ -1,7 +1,42 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import Editor, { OnMount, OnChange } from "@monaco-editor/react";
+import Editor, { OnMount, OnChange, loader } from "@monaco-editor/react";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
-import { editor } from "monaco-editor";
+
+loader.init().then((monaco) => {
+  monaco.editor.defineTheme("opendevdock-dark", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [
+      { token: "comment", foreground: "8b95b0", fontStyle: "italic" },
+      { token: "keyword", foreground: "ac89ff" },
+      { token: "string", foreground: "39FF14" },
+      { token: "number", foreground: "00cffc" },
+      { token: "type", foreground: "69daff" },
+      { token: "function", foreground: "69daff" },
+      { token: "variable", foreground: "dee5ff" },
+      { token: "constant", foreground: "00cffc" },
+    ],
+    colors: {
+      "editor.background": "#000000",
+      "editor.foreground": "#dee5ff",
+      "editor.lineHighlightBackground": "#212121",
+      "editor.selectionBackground": "rgba(57, 255, 20, 0.2)",
+      "editor.inactiveSelectionBackground": "rgba(57, 255, 20, 0.1)",
+      "editorCursor.foreground": "#39FF14",
+      "editorLineNumber.foreground": "#8b95b0",
+      "editorLineNumber.activeForeground": "#dee5ff",
+      "editorIndentGuide.background1": "#212121",
+      "editorIndentGuide.activeBackground1": "#39FF14",
+      "editor.selectionHighlightBackground": "rgba(57, 255, 20, 0.1)",
+      "editorBracketMatch.background": "rgba(57, 255, 20, 0.2)",
+      "editorBracketMatch.border": "#39FF14",
+      "scrollbar.shadow": "#000000",
+      "scrollbarSlider.background": "rgba(57, 255, 20, 0.2)",
+      "scrollbarSlider.hoverBackground": "rgba(57, 255, 20, 0.3)",
+      "scrollbarSlider.activeBackground": "rgba(57, 255, 20, 0.4)",
+    },
+  });
+});
 
 interface EditorTabProps {
   path: string;
@@ -73,7 +108,7 @@ export function EditorTab({ path, onSave, onContentChange, onMount, onOriginalCo
   const [error, setError] = useState<string | null>(null);
   
   // Refs
-  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
   const contentRef = useRef<string>("");
   const isDirtyRef = useRef(false);
   const saveHandlerRef = useRef<(() => void) | null>(null);
@@ -180,7 +215,7 @@ export function EditorTab({ path, onSave, onContentChange, onMount, onOriginalCo
   const editorOptions = {
     minimap: { enabled: false },
     fontSize: 14,
-    fontFamily: "Menlo, Monaco, 'Courier New', monospace",
+    fontFamily: "'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace",
     lineNumbers: "on" as const,
     wordWrap: "off" as const,
     automaticLayout: true,
@@ -233,7 +268,7 @@ export function EditorTab({ path, onSave, onContentChange, onMount, onOriginalCo
         value={content}
         onChange={handleChange}
         onMount={handleEditorMount}
-        theme="vs-dark"
+        theme="opendevdock-dark"
         options={editorOptions}
       />
     </div>

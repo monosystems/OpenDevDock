@@ -84,6 +84,18 @@ input:focus {
 
 .app-header button {
   -webkit-app-region: no-drag;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  transition: background 0.15s;
+}
+
+.app-header button:hover {
+  background: rgba(57, 255, 20, 0.1);
 }
 
 .session-name {
@@ -548,6 +560,7 @@ input:focus {
 .tab-close:hover {
   opacity: 1;
   background: rgba(255, 255, 255, 0.1);
+  color: var(--error);
 }
 
 .tab-add {
@@ -656,10 +669,13 @@ input:focus {
   height: 100%;
   color: var(--on-surface-variant);
   background: var(--surface);
+  font-size: 14px;
 }
 
 .tab-content-error {
   color: var(--error);
+  padding: 20px;
+  text-align: center;
 }
 
 /* Ensure Monaco editor takes full height */

@@ -21,8 +21,6 @@ interface FileTreeProps {
 export function FileTree({ nodes, onFileClick, onCreateFile, onCreateDirectory, onRename, onDelete, onMove, level = 0, rootPath, onRootDragOverChange, changedFilePaths = new Set() }: FileTreeProps) {
   const [clipboardInfo, setClipboardInfo] = useState<{ node: FileNode; action: "cut" | "copy" } | null>(null);
 
-  console.log("[FILETREE DEBUG V3 LOADED] level=", level, "nodes=", nodes.length);
-
   useEffect(() => {
     const count = document.querySelectorAll(".file-node").length;
     console.log("[FILETREE] .file-node count after mount:", count);
@@ -526,10 +524,10 @@ function FileTreeNode({
               onBlur={handleCreateFileSubmit}
               onKeyDown={handleCreateFileKeyDown}
               onClick={(e) => e.stopPropagation()}
-              style={newFileError ? { borderColor: "var(--error-color, #f14c4c)" } : undefined}
+              style={newFileError ? { borderColor: "var(--error)" } : undefined}
             />
             {newFileError && (
-              <span style={{ color: "var(--error-color, #f14c4c)", fontSize: "11px" }}>
+              <span style={{ color: "var(--error)", fontSize: "11px" }}>
                 {newFileError}
               </span>
             )}
@@ -549,10 +547,10 @@ function FileTreeNode({
               onBlur={handleCreateDirectorySubmit}
               onKeyDown={handleCreateDirectoryKeyDown}
               onClick={(e) => e.stopPropagation()}
-              style={newDirError ? { borderColor: "var(--error-color, #f14c4c)" } : undefined}
+              style={newDirError ? { borderColor: "var(--error)" } : undefined}
             />
             {newDirError && (
-              <span style={{ color: "var(--error-color, #f14c4c)", fontSize: "11px" }}>
+              <span style={{ color: "var(--error)", fontSize: "11px" }}>
                 {newDirError}
               </span>
             )}

@@ -280,10 +280,8 @@ export function WorkspaceView({
 
   const handleCreateFile = useCallback(
     async (parentPath: string, name: string) => {
-      console.log("[WorkspaceView] handleCreateFile:", parentPath, name);
       try {
         const result = await createFile(parentPath, name);
-        console.log("[WorkspaceView] createFile result:", result);
         trackFileCreated(result.path, name);
         await loadFileTree();
       } catch (e) {
@@ -354,7 +352,6 @@ export function WorkspaceView({
 
   const handleMove = useCallback(
     async (sourcePath: string, destDir: string) => {
-      console.log("[WorkspaceView] handleMove:", sourcePath, "->", destDir);
       try {
         await movePath(sourcePath, destDir);
         await loadFileTree();
