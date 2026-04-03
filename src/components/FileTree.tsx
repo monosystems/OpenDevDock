@@ -117,6 +117,7 @@ function FileTreeNode({
   const renameInputRef = useRef<HTMLInputElement>(null);
   const newFileInputRef = useRef<HTMLInputElement>(null);
   const newDirInputRef = useRef<HTMLInputElement>(null);
+  const menuItemsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
   // === POINTER DRAG STATE (Prototyp) ===
   const [isPointerDragging, setIsPointerDragging] = useState(false);
@@ -153,6 +154,12 @@ function FileTreeNode({
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
+  }, [contextMenu]);
+
+  useEffect(() => {
+    if (contextMenu) {
+      menuItemsRef.current[0]?.focus();
+    }
   }, [contextMenu]);
 
   const handleClick = useCallback(() => {
@@ -205,6 +212,19 @@ function FileTreeNode({
     },
     []
   );
+
+  const handleMenuKeyDown = useCallback((e: React.KeyboardEvent, index: number) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      menuItemsRef.current[index + 1]?.focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      menuItemsRef.current[index - 1]?.focus();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setContextMenu(null);
+    }
+  }, []);
 
   const handleCreateFileClick = useCallback(() => {
     setContextMenu(null);
@@ -541,39 +561,76 @@ function FileTreeNode({
           className="context-menu"
           style={{ top: contextMenu.y, left: contextMenu.x }}
           onClick={(e) => e.stopPropagation()}
+          role="menu"
         >
           {node.is_dir && (
             <>
-              <button className="context-menu-item" onClick={handleCreateFileClick}>
+              <button
+                ref={(el) => { menuItemsRef.current[0] = el; }}
+                className="context-menu-item"
+                onClick={handleCreateFileClick}
+                onKeyDown={(e) => handleMenuKeyDown(e, 0)}
+                role="menuitem"
+              >
                 📄 Neue Datei
               </button>
               <button
+                ref={(el) => { menuItemsRef.current[1] = el; }}
                 className="context-menu-item"
                 onClick={handleCreateDirectoryClick}
+                onKeyDown={(e) => handleMenuKeyDown(e, 1)}
+                role="menuitem"
               >
                 📁 Neuer Ordner
               </button>
-              <div className="context-menu-divider" />
+              <div className="context-menu-divider" role="separator" />
             </>
           )}
           {clipboardInfo && node.is_dir && (
-            <button className="context-menu-item" onClick={handlePaste}>
+            <button
+              ref={(el) => { menuItemsRef.current[2] = el; }}
+              className="context-menu-item"
+              onClick={handlePaste}
+              onKeyDown={(e) => handleMenuKeyDown(e, 2)}
+              role="menuitem"
+            >
               📋 Einfügen
             </button>
           )}
-          <button className="context-menu-item" onClick={handleCut}>
+          <button
+            ref={(el) => { menuItemsRef.current[clipboardInfo && node.is_dir ? 3 : 2] = el; }}
+            className="context-menu-item"
+            onClick={handleCut}
+            onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 3 : 2)}
+            role="menuitem"
+          >
             ✂️ Ausschneiden
           </button>
-          <button className="context-menu-item" onClick={handleCopy}>
+          <button
+            ref={(el) => { menuItemsRef.current[clipboardInfo && node.is_dir ? 4 : 3] = el; }}
+            className="context-menu-item"
+            onClick={handleCopy}
+            onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 4 : 3)}
+            role="menuitem"
+          >
             📄 Kopieren
           </button>
-          <div className="context-menu-divider" />
-          <button className="context-menu-item" onClick={handleRename}>
+          <div className="context-menu-divider" role="separator" />
+          <button
+            ref={(el) => { menuItemsRef.current[clipboardInfo && node.is_dir ? 5 : 4] = el; }}
+            className="context-menu-item"
+            onClick={handleRename}
+            onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 5 : 4)}
+            role="menuitem"
+          >
             ✏️ Umbenennen
           </button>
           <button
+            ref={(el) => { menuItemsRef.current[clipboardInfo && node.is_dir ? 6 : 5] = el; }}
             className="context-menu-item context-menu-item-danger"
             onClick={handleDelete}
+            onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 6 : 5)}
+            role="menuitem"
           >
             🗑️ Löschen
           </button>

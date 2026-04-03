@@ -31,12 +31,23 @@ export function TabBar({
           {otherTabs.map((tab) => (
             <div
               key={tab.id}
+              role="tab"
+              id={`tab-${tab.id}`}
+              aria-selected={tab.id === activeTabId}
+              aria-controls={`panel-${tab.id}`}
+              tabIndex={tab.id === activeTabId ? 0 : -1}
               className={`tab ${tab.id === activeTabId ? "active" : ""}`}
               onClick={() => onTabSelect(tab.id)}
               onDoubleClick={() => {
                 if (tab.type === "terminal") {
                   const newTitle = prompt("Rename tab:", tab.title);
                   if (newTitle) onTabRename(tab.id, newTitle);
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onTabSelect(tab.id);
                 }
               }}
             >
@@ -71,8 +82,19 @@ export function TabBar({
           )}
           {changesTab && (
             <div
+              role="tab"
+              id={`tab-${changesTab.id}`}
+              aria-selected={changesTab.id === activeTabId}
+              aria-controls={`panel-${changesTab.id}`}
+              tabIndex={changesTab.id === activeTabId ? 0 : -1}
               className={`tab changes-tab ${changesTab.id === activeTabId ? "active" : ""}`}
               onClick={() => onTabSelect(changesTab.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onTabSelect(changesTab.id);
+                }
+              }}
             >
               <span className="tab-icon">◆</span>
               <span className="tab-title">Changes</span>
