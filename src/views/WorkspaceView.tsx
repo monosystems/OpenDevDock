@@ -22,8 +22,10 @@ interface WorkspaceViewProps {
   trackFileCreated: (path: string, name: string) => void;
   trackFileEdited: (path: string, name: string, originalContent: string) => void;
   trackFileDeleted: (path: string, name: string, originalContent: string) => void;
+  trackDirectoryDeleted: (node: FileNode) => Promise<void>;
   changedFilePaths: Set<string>;
   hasChanges: boolean;
+  openInChangesView?: boolean;
 }
 
 interface TabItem {
@@ -42,8 +44,10 @@ export function WorkspaceView({
   trackFileCreated,
   trackFileEdited,
   trackFileDeleted,
+  trackDirectoryDeleted,
   changedFilePaths,
   hasChanges,
+  openInChangesView = false,
 }: WorkspaceViewProps) {
   const [fileTree, setFileTree] = useState<FileNode[]>([]);
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -92,6 +96,13 @@ export function WorkspaceView({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []); // Empty deps - setup once
+
+  // Auto-open Changes tab when opening a session from history
+  useEffect(() => {
+    if (openInChangesView && session && !tabList.some(t => t.type === "changes")) {
+      handleOpenChangesTab();
+    }
+  }, [openInChangesView, session]);
 
   const initTerminal = async () => {
     try {
@@ -269,10 +280,8 @@ export function WorkspaceView({
 
   const handleCreateFile = useCallback(
     async (parentPath: string, name: string) => {
-      console.log("[WorkspaceView] handleCreateFile:", parentPath, name);
       try {
         const result = await createFile(parentPath, name);
-        console.log("[WorkspaceView] createFile result:", result);
         trackFileCreated(result.path, name);
         await loadFileTree();
       } catch (e) {
@@ -319,7 +328,9 @@ export function WorkspaceView({
   const handleDelete = useCallback(
     async (node: FileNode) => {
       try {
-        if (!node.is_dir) {
+        if (node.is_dir) {
+          await trackDirectoryDeleted(node);
+        } else {
           let originalContent = "";
           try {
             originalContent = await readFileContent(node.path);
@@ -336,12 +347,11 @@ export function WorkspaceView({
         alert(`Fehler beim Löschen: ${e}`);
       }
     },
-    [trackFileDeleted]
+    [trackFileDeleted, trackDirectoryDeleted]
   );
 
   const handleMove = useCallback(
     async (sourcePath: string, destDir: string) => {
-      console.log("[WorkspaceView] handleMove:", sourcePath, "->", destDir);
       try {
         await movePath(sourcePath, destDir);
         await loadFileTree();
@@ -352,6 +362,9 @@ export function WorkspaceView({
     },
     []
   );
+
+  const changesTab = tabList.find(t => t.type === "changes");
+  const otherTabs = tabList.filter(t => t.type !== "changes");
 
   return (
     <div className="app-container">
@@ -396,26 +409,26 @@ export function WorkspaceView({
         <div className="main-area">
           <div className="tabs-container">
             <div className="tabs-list">
-              {tabList.map((tab) => (
-                <div
-                  key={tab.id}
-                  className={`tab ${tab.id === activeTabId ? "active" : ""}`}
-                  onClick={() => setActiveTabId(tab.id)}
-                  onDoubleClick={() => {
-                    if (tab.type === "terminal") {
-                      const newTitle = prompt("Rename tab:", tab.title);
-                      if (newTitle) handleRenameTab(tab.id, newTitle);
-                    }
-                  }}
-                >
-                  <span className="tab-icon">
-                    {tab.type === "terminal" ? ">" : tab.type === "changes" ? "◆" : "📄"}
-                  </span>
-                  <span className="tab-title">
-                    {tab.isDirty && <span className="tab-dirty-indicator">●</span>}
-                    {tab.title}
-                  </span>
-                  {tab.type !== "changes" && (
+              <div className="tabs-left">
+                {otherTabs.map((tab) => (
+                  <div
+                    key={tab.id}
+                    className={`tab ${tab.id === activeTabId ? "active" : ""}`}
+                    onClick={() => setActiveTabId(tab.id)}
+                    onDoubleClick={() => {
+                      if (tab.type === "terminal") {
+                        const newTitle = prompt("Rename tab:", tab.title);
+                        if (newTitle) handleRenameTab(tab.id, newTitle);
+                      }
+                    }}
+                  >
+                    <span className="tab-icon">
+                      {tab.type === "terminal" ? ">" : "📄"}
+                    </span>
+                    <span className="tab-title">
+                      {tab.isDirty && <span className="tab-dirty-indicator">●</span>}
+                      {tab.title}
+                    </span>
                     <button
                       className="tab-close"
                       onClick={(e) => {
@@ -425,18 +438,29 @@ export function WorkspaceView({
                     >
                       ×
                     </button>
-                  )}
-                </div>
-              ))}
-              {hasChanges && (
-                <button
-                  className="tab-add changes-tab-btn"
-                  onClick={handleOpenChangesTab}
-                  title="Show Changes"
-                >
-                  ◆ Changes
-                </button>
-              )}
+                  </div>
+                ))}
+              </div>
+              <div className="tabs-right">
+                {hasChanges && !changesTab && (
+                  <button
+                    className="tab-add changes-tab-btn"
+                    onClick={handleOpenChangesTab}
+                    title="Show Changes"
+                  >
+                    ◆ Changes
+                  </button>
+                )}
+                {changesTab && (
+                  <div
+                    className={`tab changes-tab ${changesTab.id === activeTabId ? "active" : ""}`}
+                    onClick={() => setActiveTabId(changesTab.id)}
+                  >
+                    <span className="tab-icon">◆</span>
+                    <span className="tab-title">Changes</span>
+                  </div>
+                )}
+              </div>
             </div>
             <button className="tab-add" onClick={handleAddTerminal}>
               +
