@@ -1140,3 +1140,143 @@ body.pointer-drag-active textarea {
   flex-direction: column;
   gap: 8px;
 }
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface-container-high);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--outline-variant);
+  min-width: 280px;
+  max-width: 400px;
+  animation: toast-enter 0.2s ease-out;
+  pointer-events: auto;
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.toast-error .toast-icon {
+  color: var(--error);
+}
+
+.toast-success .toast-icon {
+  color: var(--success);
+}
+
+.toast-info .toast-icon {
+  color: var(--on-surface-variant);
+}
+
+.toast-message {
+  flex: 1;
+  font-size: 13px;
+  color: var(--on-surface);
+  line-height: 1.4;
+}
+
+.toast-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  color: var(--on-surface-variant);
+  border-radius: 4px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.toast-close:hover {
+  background: var(--surface-container-highest);
+  color: var(--on-surface);
+}
+
+/* Error Boundary */
+.error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 24px;
+}
+
+.error-boundary-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.error-boundary h2 {
+  color: var(--error);
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.error-boundary p {
+  color: var(--on-surface-variant);
+  margin-bottom: 16px;
+}
+
+.error-details {
+  background: var(--surface-container-low);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.error-details summary {
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  font-size: 12px;
+}
+
+.error-details pre {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--on-surface);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.error-reload-btn {
+  padding: 8px 16px;
+  background: var(--primary);
+  color: #000;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+
+.error-reload-btn:hover {
+  background: var(--primary-hover);
+}

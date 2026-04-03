@@ -6,6 +6,7 @@ import { useTerminalManager } from "../hooks/useTerminalManager";
 import { TabBar } from "../components/TabBar";
 import { TabContent } from "../components/TabContent";
 import { Resizer } from "../components/Resizer";
+import { useToast } from "../contexts/ToastContext";
 
 import {
   createFile,
@@ -72,6 +73,8 @@ export function WorkspaceView({
     resizeTerminal,
     renameTerminal,
   } = useTerminalManager();
+
+  const toast = useToast();
 
   useEffect(() => {
     loadFileTree();
@@ -276,7 +279,7 @@ export function WorkspaceView({
         await loadFileTree();
       } catch (e) {
         console.error("Failed to create file:", e);
-        alert(`Fehler beim Erstellen der Datei: ${e}`);
+        toast.error(`Fehler beim Erstellen der Datei: ${e}`);
       }
     },
     [trackFileCreated]
@@ -289,7 +292,7 @@ export function WorkspaceView({
         await loadFileTree();
       } catch (e) {
         console.error("Failed to create directory:", e);
-        alert(`Fehler beim Erstellen des Ordners: ${e}`);
+        toast.error(`Fehler beim Erstellen des Ordners: ${e}`);
       }
     },
     []
@@ -309,7 +312,7 @@ export function WorkspaceView({
         );
       } catch (e) {
         console.error("Failed to rename:", e);
-        alert(`Fehler beim Umbenennen: ${e}`);
+        toast.error(`Fehler beim Umbenennen: ${e}`);
       }
     },
     []
@@ -334,7 +337,7 @@ export function WorkspaceView({
         setTabList((prev) => prev.filter((t) => t.path !== node.path));
       } catch (e) {
         console.error("Failed to delete:", e);
-        alert(`Fehler beim Löschen: ${e}`);
+        toast.error(`Fehler beim Löschen: ${e}`);
       }
     },
     [trackFileDeleted, trackDirectoryDeleted]
@@ -347,7 +350,7 @@ export function WorkspaceView({
         await loadFileTree();
       } catch (e) {
         console.error("Failed to move:", e);
-        alert(`Fehler beim Verschieben: ${e}`);
+        toast.error(`Fehler beim Verschieben: ${e}`);
       }
     },
     []
