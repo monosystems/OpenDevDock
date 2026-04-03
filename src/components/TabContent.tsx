@@ -32,6 +32,10 @@ export function TabContent({
           return (
             <div
               key={tab.id}
+              role="tabpanel"
+              id={`panel-${tab.id}`}
+              aria-labelledby={`tab-${tab.id}`}
+              hidden={tab.id !== activeTabId}
               style={{ display: tab.id === activeTabId ? "block" : "none", height: "100%", position: "relative" }}
             >
               <Terminal
@@ -44,7 +48,14 @@ export function TabContent({
         if (tab.type === "file" && tab.path && tab.id === activeTabId) {
           const filePath = tab.path;
           return (
-            <div key={tab.id} style={{ display: "block", height: "100%", position: "relative" }}>
+            <div
+              key={tab.id}
+              role="tabpanel"
+              id={`panel-${tab.id}`}
+              aria-labelledby={`tab-${tab.id}`}
+              hidden={tab.id !== activeTabId}
+              style={{ display: tab.id === activeTabId ? "block" : "none", height: "100%", position: "relative" }}
+            >
               <EditorTab
                 path={filePath}
                 onSave={() => onEditorSave(filePath)}
@@ -57,7 +68,14 @@ export function TabContent({
         }
         if (tab.type === "changes" && tab.id === activeTabId && session) {
           return (
-            <div key={tab.id} style={{ display: "block", height: "100%", position: "relative" }}>
+            <div
+              key={tab.id}
+              role="tabpanel"
+              id={`panel-${tab.id}`}
+              aria-labelledby={`tab-${tab.id}`}
+              hidden={tab.id !== activeTabId}
+              style={{ display: tab.id === activeTabId ? "block" : "none", height: "100%", position: "relative" }}
+            >
               <ChangesTab session={session} />
             </div>
           );
