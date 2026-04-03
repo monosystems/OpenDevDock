@@ -336,57 +336,29 @@ function FileTreeNode({
   // === POINTER DRAG HELPER ===
   function findDropTargetPath(els: Element[], sourcePath: string, rootPath?: string): string | null {
     const candidates: { path: string; depth: number }[] = [];
-    let hasTreeElements = false;
-    let isOverFileTreeContent = false;
 
     for (const el of els) {
-      if (el.classList?.contains('file-tree-content')) {
-        isOverFileTreeContent = true;
-      }
       if (!el.hasAttribute('data-node-path')) continue;
-
-      hasTreeElements = true;
       const path = el.getAttribute('data-node-path')!;
       const isDir = el.getAttribute('data-is-dir') === 'true';
 
-      console.log(`[POINTER-DRAG] DOM element: path=${path} isDir=${isDir} class=${el.className}`);
-
-      if (path === sourcePath) {
-        console.log(`[POINTER-DRAG] skip - is source itself`);
-        continue;
-      }
-
-      if (path.startsWith(sourcePath + '/')) {
-        console.log(`[POINTER-DRAG] skip ${path} - is inside source`);
-        continue;
-      }
-
-      if (!isDir) {
-        console.log(`[POINTER-DRAG] skip ${path} - not a directory`);
+      if (path === sourcePath || path.startsWith(sourcePath + '/') || !isDir) {
         continue;
       }
 
       const depth = path.split('/').filter(Boolean).length;
       candidates.push({ path, depth });
-      console.log(`[POINTER-DRAG] candidate dir: ${path} (depth=${depth})`);
     }
 
-    console.log(`[POINTER-DRAG] Summary: candidates=${candidates.length}, hasTreeElements=${hasTreeElements}, isOverFileTreeContent=${isOverFileTreeContent}, rootPath=${rootPath}`);
-
     if (candidates.length === 0) {
-      console.log(`[POINTER-DRAG] no valid dir candidates at point`);
       if (rootPath && rootPath !== sourcePath && !rootPath.startsWith(sourcePath + '/')) {
-        console.log(`[POINTER-DRAG] FALLBACK to ROOT: ${rootPath}`);
         return rootPath;
       }
       return null;
     }
 
     candidates.sort((a, b) => a.depth - b.depth);
-    const best = candidates[0];
-    console.log(`[POINTER-DRAG] BEST TARGET: ${best.path} (depth=${best.depth})`);
-
-    return best.path;
+    return candidates[0].path;
   }
 
   // === POINTER DRAG HANDLERS (Prototyp) ===
@@ -405,8 +377,6 @@ function FileTreeNode({
       isPointerDragActiveRef.current = false;
       currentPointerDragSourceRef.current = node.path;
 
-      console.log(`[POINTER-DRAG] mousedown node=${node.name} path=${node.path}`);
-
       const handlePointerMouseMove = (moveEvent: MouseEvent) => {
         if (!dragStartPosRef.current) return;
 
@@ -422,7 +392,6 @@ function FileTreeNode({
           isPointerDragActiveRef.current = true;
           setIsPointerDragging(true);
           document.body.classList.add("pointer-drag-active");
-          console.log(`[POINTER-DRAG] STARTED source=${node.path}`);
         }
 
         const els = document.elementsFromPoint(moveEvent.clientX, moveEvent.clientY);
@@ -459,10 +428,7 @@ function FileTreeNode({
         const els = document.elementsFromPoint(upEvent.clientX, upEvent.clientY);
         const targetPath = findDropTargetPath(els, sourcePath, rootPath);
 
-        if (!targetPath) {
-          console.log(`[POINTER-DRAG] DROP ABORTED - no valid target`);
-        } else {
-          console.log(`[POINTER-DRAG] DROP EXECUTE onMove(${sourcePath}, ${targetPath})`);
+        if (targetPath) {
           onMove(sourcePath, targetPath);
         }
       };
