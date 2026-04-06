@@ -28,7 +28,7 @@ jobs:
           pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
   tauri-dev:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'pull_request' && github.base.ref == 'develop')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
