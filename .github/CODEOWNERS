@@ -1,1 +1,9 @@
+# Default owner
 * @monosystems
+
+# Core project
+/src/        @monosystems
+/src-tauri/  @monosystems
+
+# Configuration
+/.github/    @monosystems

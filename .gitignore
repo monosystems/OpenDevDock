@@ -4,3 +4,12 @@ target
 *.log
 .DS_Store
 tsconfig.tsbuildinfo
+STYLEGUIDE.md
+.env
+.env.*
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.opendevdock/
