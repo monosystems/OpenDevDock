@@ -49,11 +49,7 @@ ci: CI/CD changes
 
 ## Code Formatting
 
-We use ESLint and Prettier for consistent code style.
-
-- Linting: `pnpm run lint`
-- Format check: `pnpm run format:check`
-- Auto-format: `pnpm run format`
+We use TypeScript with strict mode. Code is formatted automatically via the build process.
 
 ## Pull Requests
 
