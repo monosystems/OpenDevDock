@@ -13,10 +13,10 @@ cd OpenDevDock
 pnpm install
 
 # Develop the app
-pnpm run tauri dev
+pnpm tauri dev
 
 # Production build
-pnpm run tauri build
+pnpm tauri build
 ```
 
 ## Branch Strategy
@@ -35,6 +35,9 @@ fix: resolve tab closing behavior
 docs: update README
 refactor: simplify state management
 test: add terminal manager tests
+chore: maintenance tasks (dependency updates, config changes)
+perf: performance improvements
+ci: CI/CD changes
 ```
 
 ## Code Style
@@ -43,6 +46,14 @@ test: add terminal manager tests
 - Functional components with hooks
 - Named exports for components
 - Explicit types for all functions
+
+## Code Formatting
+
+We use ESLint and Prettier for consistent code style.
+
+- Linting: `pnpm run lint`
+- Format check: `pnpm run format:check`
+- Auto-format: `pnpm run format`
 
 ## Pull Requests
 
@@ -53,10 +64,24 @@ test: add terminal manager tests
 
 PRs are reviewed and merged when they meet the standards.
 
+## Code Review
+
+- All PRs require CI to pass (TypeScript checks + build)
+- At least one review approval required before merge
+- Reviewers may request changes
+- Only maintainers can merge
+
 ## Testing
 
-80% test coverage required. New features need tests.
+During MVP phase, tests are encouraged but not required:
 
-## Questions?
+- **Unit tests**: Required for utility functions and state management
+- **Integration tests**: Required for Tauri command handlers
+- **UI tests**: Optional but recommended for user-facing features
 
-Use GitHub Issues for bugs and feature requests.
+Run tests locally: `pnpm test`
+
+## Getting Help
+
+- Found a bug? → [Open an Issue](https://github.com/monosystems/OpenDevDock/issues)
+- Want to discuss a feature? → [GitHub Discussions](https://github.com/monosystems/OpenDevDock/discussions)

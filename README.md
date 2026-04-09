@@ -2,14 +2,22 @@
 
 **Terminal-first Developer Workspace**
 
-[![CI Status](https://img.shields.io/github/actions/workflow/status/monosystems/OpenDevDock/ci.yml?branch=main)](https://github.com/monosystems/OpenDevDock/actions)
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tauri 2.0](https://img.shields.io/badge/Tauri-2.0-4B6BF4?logo=tauri)](https://tauri.app/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/monosystems/OpenDevDock/ci.yml?branch=main&style=flat-square)](https://github.com/monosystems/OpenDevDock/actions)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Tauri 2.0](https://img.shields.io/badge/Tauri-2.0-4B6BF4?logo=tauri&style=flat-square)](https://tauri.app/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&style=flat-square)](https://react.dev/)
+[![Stars](https://img.shields.io/github/stars/monosystems/OpenDevDock?style=flat-square)](https://github.com/monosystems/OpenDevDock/stargazers)
+[![Version](https://img.shields.io/github/v/release/monosystems/OpenDevDock?include_prereleases&style=flat-square)](https://github.com/monosystems/OpenDevDock/releases)
 
-**OpenDevDock** is a terminal-first developer workspace for macOS and Linux. Keep your projects in view with an integrated terminal, file editor, and session tracking – all in one desktop app.
+Stop switching between Terminal, Editor and File Manager. OpenDevDock brings everything into one persistent workspace.
 
-[Website](https://github.com/monosystems/OpenDevDock) · [Docs](https://github.com/monosystems/OpenDevDock#development) · [Roadmap](docs/TODO.md)
+## Why OpenDevDock?
+
+**No context switches.** iTerm + VS Code means jumping between windows. OpenDevDock keeps terminal, file tree, and editor in one window.
+
+**Persistent sessions.** Your terminal sessions survive app restarts. Open a project tomorrow exactly as you left it today.
+
+**All-in-one workspace.** One app, one window, less friction. Built on Tauri 2.0 for native performance on macOS and Linux.
 
 ## Features
 
@@ -19,22 +27,49 @@
 - **File Editor**: Open and edit files directly in the workspace with syntax highlighting
 - **Session Tracking**: Track changes and restore previous sessions
 
+## How does it compare?
+
+| Feature | OpenDevDock | iTerm + VS Code |
+|---------|:-----------:|:--------------:|
+| Terminal | ✓ | ✓ |
+| File Tree | ✓ | ✗ |
+| Session Restore | ✓ | ✗ |
+| File Editor | ✓ | ✓ (Extension) |
+
 ## Quick Start
 
 ```bash
-# Install dependencies
+git clone https://github.com/monosystems/OpenDevDock.git
+cd OpenDevDock
 pnpm install
-
-# Develop the app
 pnpm start
-
-# Production build
-pnpm tauri build
 ```
+
+## Install
+
+### macOS
+
+```bash
+brew install --cask opendevdock
+```
+
+### Linux
+
+```bash
+flatpak install flathub com.opendevdock.OpenDevDock
+```
+
+## Requirements
+
+Install Rust: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+
+- **OS**: macOS 12+ / Ubuntu 20.04+ / Debian 11+
+- **Runtime**: Rust 1.70+
+- **Package Manager**: pnpm 8+
 
 ## Tech Stack
 
-- **Frontend**: React 18 + TypeScript (strict mode)
+- **Frontend**: React 19 + TypeScript (strict mode)
 - **Desktop**: Tauri 2.0
 - **Terminal**: @xterm/xterm + portable-pty
 - **Editor**: Monaco Editor
@@ -50,34 +85,33 @@ OpenDevDock/
 │   ├── hooks/                # Custom Hooks
 │   └── commands/             # Tauri Command Wrappers
 │
-├── src-tauri/                # Rust Backend
-│   ├── src/lib.rs            # Main Logic and Commands
-│   └── capabilities/         # Tauri 2.0 Permissions
-│
-└── docs/                     # Documentation
-    └── TODO.md               # Feature Roadmap
+└── src-tauri/                # Rust Backend
+    ├── src/lib.rs            # Main Logic and Commands
+    └── capabilities/         # Tauri 2.0 Permissions
 ```
+
+## Architecture
+
+![Architecture Diagram](docs/screenshots/architecture.png)
 
 ## Development
-
-### From Source
-
-```bash
-git clone https://github.com/monosystems/OpenDevDock.git
-cd OpenDevDock
-
-pnpm install
-pnpm start
-```
 
 ### Frontend Only
 
 ```bash
 pnpm run dev     # Vite dev server (hot reload)
 pnpm run build   # TypeScript check + production build
+pnpm preview     # Preview production build
 ```
 
-### Commands
+### Full App
+
+```bash
+pnpm start       # Start Tauri development build
+pnpm tauri build # Build production Tauri app
+```
+
+## Commands
 
 | Command | Description |
 |---------|-------------|
@@ -86,28 +120,14 @@ pnpm run build   # TypeScript check + production build
 | `pnpm start` | Start Tauri development build |
 | `pnpm tauri build` | Build production Tauri app |
 
-## Architecture
+## Contributing
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                     OpenDevDock                          │
-│                  (Desktop Application)                     │
-├──────────────────┬──────────────────────────────────────┤
-│                  │                                       │
-│   File Tree      │         Main Workspace                 │
-│   (280px)        │                                       │
-│                  │   ┌─────────────────────────────────┐ │
-│   - Folders      │   │  Tab Bar (Terminal + Files)    │ │
-│   - Files        │   ├─────────────────────────────────┤ │
-│                  │   │                                 │ │
-│                  │   │    Active Tab Content           │ │
-│                  │   │    - Terminal (xterm.js)       │ │
-│                  │   │    - Editor (Monaco)          │ │
-│                  │   │                                 │ │
-│                  │   └─────────────────────────────────┘ │
-│                  │                                       │
-└──────────────────┴──────────────────────────────────────┘
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## Community
+
+- [GitHub Discussions](https://github.com/monosystems/OpenDevDock/discussions)
+- [Bug Reports](https://github.com/monosystems/OpenDevDock/issues)
 
 ## License
 

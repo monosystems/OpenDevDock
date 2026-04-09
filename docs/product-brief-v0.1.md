@@ -1,157 +1,157 @@
 # Product Brief v0.1
 
-## Projekt
+## Project
 Terminal-First Developer Workspace
 
 ## Status
-Arbeitsentwurf / frühe Planungsphase
+Working draft / early planning phase
 
-## Kontext
-Dieses Produkt soll eine schlanke, performante Arbeitssoftware für Entwickler werden, die zwischen einem reinen Terminal-Setup und einer voll ausgestatteten IDE wie VS Code liegt. Der Fokus liegt auf projektbezogener Arbeit mit möglichst wenig Kontextwechseln zwischen Terminal, Dateien, Vorschau und einfachem Editing.
+## Context
+This product is intended to become a lean, performant working software for developers that sits between a pure terminal setup and a fully equipped IDE like VS Code. The focus is on project-related work with as little context switching as possible between terminal, files, preview, and simple editing.
 
 ## Problem
-Viele Entwickler arbeiten täglich mit mehreren Fenstern und Werkzeugen gleichzeitig:
+Many developers work daily with multiple windows and tools simultaneously:
 - Terminal
-- Editor oder IDE
-- Dateimanager
-- Datei-Vorschau
-- KI-Tools oder agentische Coding-Tools
+- Editor or IDE
+- File manager
+- File preview
+- AI tools or agentic coding tools
 
-Dadurch entstehen mehrere Probleme:
-- häufiger Kontextwechsel
-- visueller und mentaler Overhead
-- unnötige Reibung im Workflow
-- zu viel Komplexität für Nutzer, denen klassische IDEs zu schwer sind
-- zu wenig Struktur für Nutzer, denen ein reines Terminal nicht ausreicht
+This causes several problems:
+- Frequent context switching
+- Visual and mental overhead
+- Unnecessary friction in the workflow
+- Too much complexity for users for whom classic IDEs are too heavy
+- Too little structure for users for whom a pure terminal is not enough
 
-## Zielgruppe
-### Primäre Zielgruppe
-- Entwickler mit terminal-nahem Arbeitsstil
-- Nutzer, denen VS Code oder ähnlich umfangreiche IDE-Setups zu überladen sind
-- Nutzer, denen das reine Terminal zu wenig Struktur bietet
-- technische Solo-Builder, Indie Hacker und fokussierte Einzelentwickler
+## Target Users
+### Primary Target Users
+- Developers with a terminal-near working style
+- Users for whom VS Code or similarly extensive IDE setups are overloaded
+- Users for whom a pure terminal offers too little structure
+- Technical solo builders, indie hackers, and focused individual developers
 
-### Sekundäre Zielgruppe
-- Entwickler, die KI-gestützte Coding-Workflows nutzen
-- Nutzer, die einen projektzentrierten statt tool-zentrierten Workspace bevorzugen
+### Secondary Target Users
+- Developers who use AI-assisted coding workflows
+- Users who prefer a project-centered rather than tool-centered workspace
 
-## Produktkategorie
+## Product Category
 Developer Workspace
 
-## Produktversprechen
-Ein minimalistischer, terminal-zentrierter Developer Workspace für Nutzer, denen VS Code zu viel und ein reines Terminal zu wenig ist.
+## Product Promise
+A minimalist, terminal-first Developer Workspace for users for whom VS Code is too much and a pure terminal is too little.
 
-## Kernnutzen
-- weniger Fensterwechsel
-- geringere kognitive Last
-- schneller Zugriff auf projektbezogene Dateien und Arbeitsbereiche
-- Fokus auf die wesentlichen workflow-kritischen Funktionen
-- performanteres, schlankeres Arbeiten als in überladenen IDE-Setups
+## Core Value
+- Fewer window switches
+- Lower cognitive load
+- Fast access to project-related files and workspaces
+- Focus on workflow-critical functions
+- More performant, leaner work than in overloaded IDE setups
 
-## Positionierung
-Das Produkt ist kein kompletter IDE-Ersatz. Es ist eine bewusst fokussierte Alternative für Entwickler, die schneller, schlanker und terminal-näher arbeiten wollen.
+## Positioning
+The product is not a complete IDE replacement. It is a deliberately focused alternative for developers who want to work faster, leaner, and more terminal-near.
 
-## Nicht-Ziele
-### Kritisch bewusst ausgeschlossen
-- kein vollständiger IDE-Ersatz
-- kein unendliches Plugin-System im MVP
-- keine vollständige Team-Kollaborationsplattform
-- keine Projektmanagement-Suite
-- keine Deployment- oder DevOps-Komplettlösung
-- keine maximale Layout-Freiheit im ersten Schritt
+## Non-Goals
+### Critically Deliberately Excluded
+- No complete IDE replacement
+- No infinite plugin system in the MVP
+- No complete team collaboration platform
+- No project management suite
+- No deployment or DevOps complete solution
+- No maximum layout freedom in the first step
 
-### Vorläufig nicht im MVP
-- komplexe Git-Visualisierung
-- integrierte Multi-Agent-Orchestrierung
-- Marketplace oder Erweiterungsökosystem
-- stark ausgedehnte Integrationen in externe Dienste
+### Provisionally Not in MVP
+- Complex git visualization
+- Integrated multi-agent orchestration
+- Marketplace or extension ecosystem
+- Heavily extended integrations into external services
 
-## Produktprinzipien
-### Kritisch
-- terminal first
-- projektfokussiert statt global überladen
-- wenige, starke Defaults
-- Performance und Direktheit vor Feature-Masse
+## Product Principles
+### Critical
+- Terminal first
+- Project-focused rather than globally overloaded
+- Few, strong defaults
+- Performance and directness over feature mass
 
-### Wichtig
-- modular, aber nicht beliebig
-- lesbar und fokussiert statt verspielt
-- einfache, vorhersehbare Bedienung
-- lokale Projektarbeit klar im Zentrum
+### Important
+- Modular, but not arbitrary
+- Readable and focused rather than playful
+- Simple, predictable operation
+- Local project work clearly at the center
 
 ### Optional
-- AI-ready Architektur
-- spätere Workspace-Presets für verschiedene Nutzertypen
-- spätere zusätzliche Ansichten je nach Workflow
+- AI-ready architecture
+- Later workspace presets for different user types
+- Later additional views depending on workflow
 
-## MVP-Scope
-### Muss enthalten sein
-1. Projektgebundene Oberfläche
-   - Ein Nutzer öffnet ein Projekt in einem klar begrenzten Workspace
+## MVP Scope
+### Must Be Included
+1. Project-bound interface
+   - A user opens a project in a clearly bounded workspace
 
 2. File Tree
-   - standardmäßig links sichtbar
-   - schneller Zugriff auf Projektdateien
+   - Visible on the left by default
+   - Fast access to project files
 
-3. Terminal als Kernfläche
-   - stabil, schnell und zentral nutzbar
+3. Terminal as core surface
+   - Stable, fast, and centrally usable
 
-4. Datei-Vorschau
-   - schnelles Öffnen und Lesen von Dateien innerhalb des Projekts
+4. File preview
+   - Quick opening and reading of files within the project
 
-5. Einfaches Datei-Editing
-   - ausreichend für kleine bis mittlere Änderungen
-   - kein Anspruch auf vollständige IDE-Funktionalität
+5. Simple file editing
+   - Sufficient for small to medium changes
+   - No claim to complete IDE functionality
 
-6. Zuschaltbare Ansichten
-   - einige klar definierte Panels oder Views
-   - bewusst begrenzte Anpassbarkeit im MVP
+6. Optional views
+   - Some clearly defined panels or views
+   - Deliberately limited adaptability in the MVP
 
-## Kern-Use-Cases
-1. Ein Entwickler öffnet ein Projekt und arbeitet überwiegend im Terminal, ohne ständig zwischen Apps zu wechseln.
-2. Ein Entwickler navigiert im File Tree, öffnet eine Datei zur Vorschau und nimmt kleine Änderungen direkt im Workspace vor.
-3. Ein Entwickler hält Terminal, Dateiansicht und projektrelevante Informationen in einer fokussierten Oberfläche zusammen.
-4. Ein Nutzer reduziert IDE-Ballast, ohne auf grundlegende Projektstruktur und Bedienkomfort zu verzichten.
+## Core Use Cases
+1. A developer opens a project and works predominantly in the terminal without constantly switching between apps.
+2. A developer navigates in the File Tree, opens a file for preview, and makes small changes directly in the workspace.
+3. A developer keeps terminal, file view, and project-relevant information together in a focused interface.
+4. A user reduces IDE ballast without giving up basic project structure and operating convenience.
 
-## Differenzierungshypothesen
-1. Der größte Unterschied ist nicht bloß Feature-Bündelung, sondern die Qualität eines fokussierten, terminal-zentrierten Arbeitsflusses.
-2. Nutzer mit Ablehnung gegen überladene IDEs bevorzugen ein reduziertes, projektgebundenes Setup mit guten Defaults.
-3. Ein klar begrenzter Workspace kann mentalen Overhead wirksamer reduzieren als ein allgemein konfigurierbares Großtool.
+## Differentiation Hypotheses
+1. The biggest difference is not merely feature bundling, but the quality of a focused, terminal-first workflow.
+2. Users with aversion to overloaded IDEs prefer a reduced, project-bound setup with good defaults.
+3. A clearly bounded workspace can reduce mental overhead more effectively than a generally configurable large tool.
 
-## Größte Risiken
-### Kritisch
-- Die Differenzierung gegenüber VS Code, Cursor oder ähnlichen Tools bleibt zu schwach.
-- Das Produkt wird durch Anpassbarkeit und Zusatzfeatures wieder selbst zu komplex.
-- Der Nutzen wird als „nice to have“ statt als echte Workflow-Verbesserung wahrgenommen.
+## Biggest Risks
+### Critical
+- The differentiation from VS Code, Cursor, or similar tools remains too weak.
+- The product becomes complex again through adaptability and additional features.
+- The usefulness is perceived as "nice to have" rather than a genuine workflow improvement.
 
-### Wichtig
-- Die Zielgruppe wird zu breit adressiert.
-- Das Produkt gerät zwischen Terminal-Purismus und IDE-Erwartungen in eine unklare Mitte.
-- Zu viele Funktionen werden zu früh in den MVP aufgenommen.
+### Important
+- The target user group is addressed too broadly.
+- The product gets stuck in an unclear middle between terminal purism and IDE expectations.
+- Too many functions are taken into the MVP too early.
 
-## Offene Fragen
-1. Wer ist der erste eng definierte Einstiegsnutzer?
-2. Welche Ansichten sind wirklich workflow-kritisch und welche nur optional?
-3. Welche konkreten Arbeitsabläufe sollen im MVP besonders gut unterstützt werden?
-4. Welche technische Plattform eignet sich für Performance, lokale Integration und Dateiarbeit am besten?
-5. Wie wird das Produkt klar von bestehenden IDE-Setups abgegrenzt?
+## Open Questions
+1. Who is the first narrowly defined entry user?
+2. Which views are truly workflow-critical and which are only optional?
+3. Which concrete workflows should be particularly well supported in the MVP?
+4. Which technical platform is best suited for performance, local integration, and file work?
+5. How is the product clearly delimited from existing IDE setups?
 
-## Empfohlene nächste Schritte
-### Kritisch
-1. Zielgruppe weiter zuspitzen
-2. Top-3 Use-Cases priorisieren
-3. MVP-Funktionsumfang weiter reduzieren und klar abgrenzen
-4. Vergleich zu VS Code, Cursor und reinem Terminal explizit ausarbeiten
+## Recommended Next Steps
+### Critical
+1. Further sharpen target user group
+2. Prioritize top 3 use cases
+3. Further reduce and clearly delimit MVP functionality scope
+4. Explicitly elaborate comparison to VS Code, Cursor, and pure terminal
 
-### Wichtig
-5. Erste Produktarchitektur grob skizzieren
-6. UI-Layout-Prinzipien definieren
-7. Validierungshypothesen und Interviewfragen formulieren
+### Important
+5. Roughly sketch initial product architecture
+6. Define UI layout principles
+7. Formulate validation hypotheses and interview questions
 
 ### Optional
-8. Namensfindung
-9. erste Wireframes
-10. grobe Roadmap nach MVP
+8. Name finding
+9. First wireframes
+10. Rough roadmap after MVP
 
-## Kurzfazit
-Das Produkt hat Potenzial als fokussierte Alternative zwischen überladenen IDEs und einem zu spartanischen Terminal-Setup. Die Stärke liegt wahrscheinlich nicht in maximalem Funktionsumfang, sondern in einer klaren, performanten und terminal-zentrierten Arbeitsumgebung mit guten Standardansichten und bewusst gesetzten Grenzen.
+## Summary
+The product has potential as a focused alternative between overloaded IDEs and a too spartan terminal setup. The strength likely lies not in maximum feature scope, but in a clear, performant, and terminal-first working environment with good default views and deliberately set boundaries.

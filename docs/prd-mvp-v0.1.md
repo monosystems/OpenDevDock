@@ -1,235 +1,235 @@
 # PRD / MVP v0.1
 
 ## Status
-Arbeitsstand nach gemeinsamer Klärung
+Working state after joint clarification
 
-## Arbeitsweise
-Dieses Dokument basiert auf einer schrittweisen gemeinsamen Ausarbeitung:
-1. Gezielte Fragen, jeweils einzeln
-2. Antworten sammeln
-3. Zwischenbewertung und kritische Prüfung
-4. Offene oder strittige Punkte klären
-5. Dokument in einen belastbaren ersten Stand überführen
+## Working Method
+This document is based on a step-by-step joint elaboration:
+1. Targeted questions, each individually
+2. Collect answers
+3. Intermediate evaluation and critical review
+4. Clarify open or disputed points
+5. Transfer document into a reliable first state
 
 ---
 
-## 1. Ziel des MVP
-Der MVP soll beweisen, dass eine schlanke, terminal-zentrierte Entwicklungsumgebung den Arbeitsfluss für Entwickler verbessert, die zwischen Terminal, Dateien und Änderungsübersicht arbeiten wollen, ohne ständig zwischen mehreren Fenstern oder einer überladenen IDE zu wechseln.
+## 1. MVP Goal
+The MVP shall prove that a lean, terminal-first development environment improves the workflow for developers who want to work between terminal, files, and change overview without constantly switching between multiple windows or an overloaded IDE.
 
-Der MVP soll dabei nicht alle möglichen Entwickler-Workflows abdecken, sondern einen klaren Kern demonstrieren:
-- projektzentrierte Arbeit
-- Terminal als Hauptarbeitsfläche
-- direkter Zugriff auf Dateien
-- sichtbare Änderungen im aktuellen Arbeitskontext
-- weniger Reibung als in klassischen IDE-Setups
+The MVP shall not cover all possible developer workflows, but demonstrate a clear core:
+- Project-centered work
+- Terminal as the main work surface
+- Direct access to files
+- Visible changes in the current work context
+- Less friction than in classic IDE setups
 
-## 2. Zielgruppe
-### Primäre Zielgruppe
-- Solo Developer
-- zielfokussierte Entwickler
-- Entwickler mit terminal-nahem Arbeitsstil
-- Entwickler, die AI-assisted arbeiten können oder wollen, aber im MVP keine tief integrierten AI-Features benötigen
-- Nutzer, denen VS Code oder ähnliche IDEs zu viel sind, ein reines Terminal aber zu wenig Struktur bietet
+## 2. Target Users
+### Primary Target Users
+- Solo developers
+- Goal-focused developers
+- Developers with a terminal-near working style
+- Developers who can or want to work with AI-assisted tools, but do not need deeply integrated AI features in the MVP
+- Users for whom VS Code or similar IDEs are too much, but a pure terminal offers too little structure
 
-### Produktiver Kernnutzer im MVP
-Ein Solo Dev, der in einem Projekt arbeitet, das Terminal aktiv nutzt, Dateien regelmäßig prüfen und bearbeiten muss und dabei möglichst wenig Fensterwechsel und UI-Ballast will.
+### Productive Core User in the MVP
+A solo dev working on a project that actively uses the terminal, who needs to regularly check and edit files, and wants as little window switching and UI ballast as possible.
 
-## 3. Kernproblem
-Viele Entwickler arbeiten heute verteilt über mehrere Oberflächen:
+## 3. Core Problem
+Many developers today work distributed across multiple surfaces:
 - Terminal
 - Editor / IDE
-- Projektdateien
-- Änderungsübersicht
-- ggf. externe Coding-Tools
+- Project files
+- Change overview
+- Possibly external coding tools
 
-Dadurch entstehen im Alltag vor allem diese Probleme:
-- zu viele Fensterwechsel
-- unnötiger mentaler Overhead
-- zu viel Ballast in klassischen IDEs
-- zu wenig Struktur in rein terminalbasierten Setups
+This especially causes these problems in everyday work:
+- Too many window switches
+- Unnecessary mental overhead
+- Too much ballast in classic IDEs
+- Too little structure in pure terminal-based setups
 
-Das zentrale Leitproblem des MVP lautet:
-**Der Wechsel zwischen Terminal, Dateien und Änderungen ist unnötig fragmentiert.**
+The central guiding problem of the MVP is:
+**The switch between terminal, files, and changes is unnecessarily fragmented.**
 
-## 4. Produktversprechen
-Ein terminal-zentrierter Developer Workspace für Nutzer, denen VS Code zu viel und ein reines Terminal zu wenig ist.
+## 4. Product Promise
+A terminal-first Developer Workspace for users for whom VS Code is too much and a pure terminal is too little.
 
-Das Produkt verspricht:
-- fokussierteres Arbeiten
-- weniger Fensterwechsel
-- weniger Overhead
-- klaren Projektkontext
-- schnelle Orientierung über Dateien und aktuelle Änderungen
+The product promises:
+- More focused work
+- Less window switching
+- Less overhead
+- Clear project context
+- Fast orientation over files and current changes
 
-## 5. Top-Use-Cases
-1. Ein Nutzer öffnet die App und wählt aus einer Liste ein lokales Projekt / einen Workspace.
-2. Nach dem Öffnen sieht der Nutzer links den File Tree des Projekts und rechts einen tab-basierten Hauptbereich.
-3. Standardmäßig arbeitet der Nutzer im Terminal-Tab.
-4. Der Nutzer startet gewünschte Tools direkt im eingebetteten Terminal selbst.
-5. Klickt der Nutzer im File Tree auf eine Datei, öffnet sie sich als eigener Tab im Hauptbereich.
-6. Der Nutzer bearbeitet Dateien direkt in der App für normale Alltagssituationen.
-7. Der Nutzer öffnet eine Diff-/Änderungsansicht, um die Änderungen der aktuellen Session als alt/neu-Vergleich zu sehen.
-8. Geänderte Dateien der aktuellen Session sind zusätzlich dezent, aber gut sichtbar im File Tree markiert.
-9. Beim erneuten Öffnen eines Projekts startet eine neue frische Session.
-10. Frühere Sessions bleiben sichtbar und aufrufbar, damit Änderungen und Dateien vergangener Arbeitssitzungen wiedergefunden werden können.
+## 5. Top Use Cases
+1. A user opens the app and selects a local project/workspace from a list.
+2. After opening, the user sees the project's File Tree on the left and a tab-based main area on the right.
+3. By default, the user works in the terminal tab.
+4. The user starts desired tools directly in the embedded terminal.
+5. If the user clicks on a file in the File Tree, it opens as its own tab in the main area.
+6. The user edits files directly in the app for normal everyday situations.
+7. The user opens a diff/change view to see the changes of the current session as a before/after comparison.
+8. Changed files of the current session are additionally marked in the File Tree, subtly but clearly visible.
+9. When opening a project again, a new fresh session starts.
+10. Earlier sessions remain visible and callable so that changes and files from past work sessions can be found again.
 
-## 6. Muss im MVP enthalten sein
-### Projekt- und Workspace-Einstieg
-- einfache Projekt-/Workspace-Liste beim Start
-- Projekt öffnen
-- bestehenden lokalen Ordner als Projekt / Workspace hinzufügen
-- Projekt aus der Liste entfernen
-- immer nur ein aktives Projekt gleichzeitig
-- ausschließlich lokale Projekte im MVP
+## 6. Must Be Included in the MVP
+### Project and Workspace Entry
+- Simple project/workspace list on startup
+- Open project
+- Add existing local folder as project/workspace
+- Remove project from list
+- Always only one active project at a time
+- Exclusively local projects in the MVP
 
-### Layout und Navigation
-- linker File Tree
-- tab-basierter Hauptbereich auf der rechten Seite
-- Standard-Haupttab: Terminal
-- Datei-Klick im File Tree öffnet Datei als Tab im Hauptbereich
+### Layout and Navigation
+- Left File Tree
+- Tab-based main area on the right side
+- Default main tab: Terminal
+- File click in File Tree opens file as tab in main area
 
 ### Terminal
-- vollständiges eingebettetes Terminal als Kernarbeitsfläche
-- mehrere individuelle Terminal-Tabs im MVP
-- neue Terminal-Tabs per Plus-Button
-- Terminal-Tabs manuell umbenennbar
-- Nutzer startet Tools selbst direkt im Terminal
+- Fully embedded terminal as core work surface
+- Multiple individual terminal tabs in the MVP
+- New terminal tabs via plus button
+- Terminal tabs manually renamable
+- User starts tools themselves directly in the terminal
 
-### Datei-Handling und Editing
-- mehrere Datei-Tabs im MVP
-- Text bearbeiten
-- manuelles Speichern als Standard
-- Undo / Redo
-- Syntax Highlighting je nach Sprache
-- Zeilennummern
-- Suche innerhalb der geöffneten Datei
+### File Handling and Editing
+- Multiple file tabs in the MVP
+- Edit text
+- Manual save as default
+- Undo/Redo
+- Syntax highlighting depending on language
+- Line numbers
+- Search within the open file
 
-### File Tree-Aktionen
+### File Tree Actions
 - Navigation
-- neue Datei
-- neuer Ordner
-- umbenennen
-- löschen mit Bestätigung
-- Drag & Drop zum Verschieben
-- visuelle Markierung geänderter Dateien der aktuellen Session
+- New file
+- New folder
+- Rename
+- Delete with confirmation
+- Drag & Drop to move
+- Visual marking of changed files of the current session
 
-### Änderungsansicht / Diff
-- eigener Diff-/Änderungstab
-- read-only im MVP
-- zeigt alle Änderungen der aktuellen Session
-- Darstellung als Vergleich alt/neu
+### Change View / Diff
+- Own diff/change tab
+- Read-only in the MVP
+- Shows all changes of the current session
+- Display as before/after comparison
 
 ### Sessions
-- beim Öffnen eines Projekts startet immer eine neue Session
-- alte Sessions bleiben erhalten
-- alte Sessions werden in einer Liste angezeigt
-- pro Session sichtbar: Name und Zeitstempel
-- Session-Namen werden automatisch generiert, sind aber manuell änderbar
-- wenn automatische Generierung nicht sinnvoll möglich ist, dient Git-Branch-Name plus Zeitstempel als Fallback
-- alte Sessions sind aufrufbar
-- beim Öffnen alter Sessions liegt der Fokus darauf, damalige Änderungen und Dateien wiederzufinden
+- When opening a project, a new session always starts
+- Old sessions are preserved
+- Old sessions are displayed in a list
+- Per session visible: name and timestamp
+- Session names are auto-generated, but can be manually changed
+- If auto-generation is not sensibly possible, git branch name plus timestamp serves as fallback
+- Old sessions are callable
+- When opening old sessions, the focus is on finding then-current changes and files
 
 ### Shortcuts
-- nur wichtigste Shortcuts im MVP
-- Suche in Datei
-- Tab schließen
-- Undo / Redo
-- zwischen Tabs wechseln
+- Only most important shortcuts in the MVP
+- Search in file
+- Close tab
+- Undo/Redo
+- Switch between tabs
 
-## 7. Sollte später folgen
-- zusätzliche AI-spezifische Features
-- AI-bezogene Monetarisierungsfunktionen
-- weitergehende Integrationen in Coding-Tools
-- globale Projektsuche
-- spezielle Vorschau für nicht-textbasierte Dateitypen
-- tiefere Session-Wiederherstellung / stärkere Rekonstruktion früherer UI-Zustände
-- Remote-/virtuelle Workspaces
-- zusätzliche Komfort-Shortcuts
-- weitere Ansichten oder Panels jenseits von Terminal, Dateien und Diff
-- eventuell Autosave als optionale Einstellung
+## 7. Should Follow Later
+- Additional AI-specific features
+- AI-related monetization features
+- Further integrations into coding tools
+- Global project search
+- Special preview for non-text-based file types
+- Deeper session recovery / stronger reconstruction of earlier UI states
+- Remote/virtual workspaces
+- Additional comfort shortcuts
+- Further views or panels beyond terminal, files, and diff
+- Possibly autosave as optional setting
 
-## 8. Bewusst nicht im MVP
-### Produktgrenzen
-- kein vollständiger IDE-Ersatz
-- keine überladene All-in-one-Entwicklungsplattform
-- keine tiefe AI-Integration im MVP
-- keine spezielle Startlogik für AI-Tools in der App
-- keine globale Projektsuche
-- keine speziellen Vorschau-Features für nicht-textbasierte Dateitypen
-- keine Remote-Workspaces
-- keine Team-Kollaboration
-- kein Plugin-/Marketplace-System
-- keine Projektmanagement- oder Deployment-Suite
+## 8. Deliberately Not in the MVP
+### Product Boundaries
+- No complete IDE replacement
+- No overloaded all-in-one development platform
+- No deep AI integration in the MVP
+- No special startup logic for AI tools in the app
+- No global project search
+- No special preview features for non-text-based file types
+- No remote workspaces
+- No team collaboration
+- No plugin/marketplace system
+- No project management or deployment suite
 
-### UI-/Bediengrenzen
-- keine frei ausufernde Layout-Flexibilität
-- keine große Auswahl zusätzlicher Tab-Typen im MVP
-- Diff-Ansicht nicht editierbar
+### UI/Operation Boundaries
+- No freely sprawling layout flexibility
+- No large selection of additional tab types in the MVP
+- Diff view not editable
 
-## 9. Erfolgskriterien
-Der MVP ist erfolgreich, wenn frühe Nutzer nach kurzer Nutzung sinngemäß sagen können:
+## 9. Success Criteria
+The MVP is successful if early users can after short use meaningfully say:
 
-**„Endlich muss ich nicht mehr ständig zwischen verschiedenen Fenstern springen, nur um Terminal, Dateien und Änderungen zusammen im Blick zu haben.“**
+**"Finally I no longer have to constantly jump between different windows just to keep terminal, files, and changes in view together."**
 
-Zusätzliche qualitative Erfolgskriterien:
-- die App fühlt sich spürbar fokussierter an als eine klassische IDE
-- der Terminal-first-Ansatz bleibt glaubwürdig
-- Nutzer verstehen die Oberfläche schnell
-- die Session-/Änderungslogik erzeugt einen echten Mehrwert statt Verwirrung
-- die App wirkt schlank statt halb fertiger IDE-Nachbau
+Additional qualitative success criteria:
+- The app feels noticeably more focused than a classic IDE
+- The terminal-first approach remains credible
+- Users quickly understand the interface
+- The session/change logic creates genuine added value rather than confusion
+- The app looks lean rather than half-finished IDE imitation
 
-## 10. Risiken und offene Fragen
-### Kritische Risiken
-1. **Session-Historie erhöht den MVP-Scope deutlich.**
-2. **Endgültiges Löschen trotz Bestätigung ist ein bewusst akzeptiertes Risiko.**
-3. **Die Differenzierung gegenüber VS Code / Cursor ist noch nicht scharf genug formuliert.**
-4. **Die technische Logik zur Erfassung von Session-Änderungen ist noch offen.**
-5. **Mehrere Terminal-Tabs machen die Qualität des Terminal-Teils geschäftskritisch.**
+## 10. Risks and Open Questions
+### Critical Risks
+1. **Session history significantly increases the MVP scope.**
+2. **Permanent deletion despite confirmation is an consciously accepted risk.**
+3. **The differentiation from VS Code/Cursor is not yet sharply enough formulated.**
+4. **The technical logic for capturing session changes is still open.**
+5. **Multiple terminal tabs make the quality of the terminal part business-critical.**
 
-### Wichtige offene Fragen
-1. Wie werden Änderungen außerhalb des Editors bzw. außerhalb direkter Bearbeitung verlässlich der aktuellen Session zugeordnet?
-2. Wie genau entsteht die automatische Session-Benennung?
-3. Wie sichtbar und zugänglich wird die Session-Liste in der UI?
-4. Wie werden Fehlerfälle bei Verschieben, Löschen und Dateioperationen sauber kommuniziert?
+### Important Open Questions
+1. How are changes outside the editor or outside direct editing reliably assigned to the current session?
+2. How exactly does automatic session naming arise?
+3. How visible and accessible will the session list be in the UI?
+4. How are error cases for moving, deleting, and file operations cleanly communicated?
 
-## 11. Strittige Entscheidungen
-### Bewusst entschieden
-- manuelles Speichern als Standard im MVP
-- endgültiges Löschen mit Bestätigung
-- Session-Historie muss in den MVP
-- mehrere Terminal-Tabs müssen in den MVP
-- mehrere Datei-Tabs müssen in den MVP
-- AI-Mehrwert im MVP nur indirekt über guten Workflow, nicht über Spezialfeatures
+## 11. Disputed Decisions
+### Consciously Decided
+- Manual save as default in the MVP
+- Permanent deletion with confirmation
+- Session history must be in the MVP
+- Multiple terminal tabs must be in the MVP
+- Multiple file tabs must be in the MVP
+- AI added value in MVP only indirectly via good workflow, not via special features
 
-### Später erneut prüfen
-- ob Löschen künftig recoverable statt endgültig sein sollte
-- ob Autosave als optionale Setting-Funktion sinnvoll wird
-- wie tief die Wiederherstellung alter Sessions später gehen soll
-- ob zusätzliche Ansichten oder Panels echten Mehrwert liefern oder nur Scope aufblasen
+### Re-examine Later
+- Whether deletion should be recoverable in the future instead of permanent
+- Whether autosave as an optional setting function makes sense
+- How deep the recovery of old sessions should go later
+- Whether additional views or panels provide genuine added value or just inflate scope
 
-## 12. Finaler MVP-Scope
-Der MVP ist ein **terminal-zentrierter, sessionbasierter Developer Workspace** für lokale Projekte.
+## 12. Final MVP Scope
+The MVP is a **terminal-first, session-based Developer Workspace** for local projects.
 
-Er bietet:
-- eine einfache Projektliste
-- genau ein aktives Projekt gleichzeitig
-- linken File Tree
-- rechten tab-basierten Hauptbereich
-- mehrere Terminal-Tabs
-- mehrere Datei-Tabs
-- read-only Diff-/Änderungstab
-- normales textbasiertes Alltags-Editing
-- Session-Historie mit sichtbaren und aufrufbaren alten Sessions
-- Fokus auf weniger Fensterwechsel zwischen Terminal, Dateien und Änderungen
+It offers:
+- A simple project list
+- Exactly one active project at a time
+- Left File Tree
+- Right tab-based main area
+- Multiple terminal tabs
+- Multiple file tabs
+- Read-only diff/change tab
+- Normal text-based everyday editing
+- Session history with visible and callable old sessions
+- Focus on fewer window switches between terminal, files, and changes
 
-Er bietet bewusst **nicht**:
-- vollständige IDE-Abdeckung
-- tiefe AI-Sonderintegration
-- globale Projektsuche
-- Remote-Projekte
-- Plugin-Systeme oder Teamfeatures
+It deliberately does **not** offer:
+- Complete IDE coverage
+- Deep AI special integration
+- Global project search
+- Remote projects
+- Plugin systems or team features
 
-## Kurzfazit
-Der MVP ist kein „kleiner VS Code“ und auch kein AI-Tool im engeren Sinn. Er ist eine fokussierte Entwicklungsumgebung für Entwickler, die terminal-nah arbeiten und dabei Dateien sowie Session-Änderungen direkt im selben Projektkontext im Blick behalten wollen.
+## Summary
+The MVP is not a "small VS Code" and not an AI tool in the narrower sense. It is a focused development environment for developers who work terminal-near and want to keep files as well as session changes directly in view in the same project context.
 
-Der eigentliche Test für den MVP lautet nicht, ob er möglichst viele Features nachbaut, sondern ob er einen spürbar direkteren und fokussierteren Arbeitsfluss erzeugt als der bisherige Wechsel zwischen IDE, Terminal und weiteren Fenstern.
+The actual test for the MVP is not whether it rebuilds as many features as possible, but whether it creates a noticeably more direct and focused workflow than the previous switch between IDE, terminal, and additional windows.
