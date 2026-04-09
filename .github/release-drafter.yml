@@ -1,0 +1,83 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  update_release_draft:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        with:
+          tag-resolver: conventional
+          template: |
+            ## {{currentTag}}
+
+            {{#each categories}}
+            ### {{name}}
+            {{#if commit_list}}
+            {{commit_list}}
+            {{else}}
+            *No changes in this category.*
+            {{/if}}
+            {{/each}}
+
+            **Full Changelog**: {{previousTag}}...{{currentTag}}
+          include-open-issues: true
+          exclude-labels:
+            - skip-changelog
+          categories:
+            - title: Features
+              labels:
+                - feat
+                - feature
+              type: added
+              commit_pattern: "^(feat|feat-core|feat-ui)(:\\s(.*))?$"
+            - title: Bug Fixes
+              labels:
+                - fix
+                - bugfix
+              type: fixed
+              commit_pattern: "^(fix|fix-core|fix-ui)(:\\s(.*))?$"
+            - title: Desktop / Tauri
+              labels:
+                - tauri
+                - desktop
+                - backend
+                - rust
+              type: changed
+              commit_pattern: "^(feat|fix|chore)(:.*)?$"
+            - title: Dependencies
+              labels:
+                - dependencies
+                - deps
+              type: changed
+              commit_pattern: "^(chore\\(deps\\)|deps)(:.*)?$"
+            - title: Documentation
+              labels:
+                - documentation
+                - docs
+              type: changed
+              commit_pattern: "^docs(:.*)?$"
+            - title: Refactoring / Chores
+              labels:
+                - refactoring
+                - chore
+                - test
+              type: changed
+              commit_pattern: "^(refactor|chore|test)(:.*)?$"
