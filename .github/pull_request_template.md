@@ -1,17 +1,20 @@
-## Beschreibung
-<!-- Was macht dieser PR? -->
+## Description
+<!-- What does this PR do? -->
 
 ## Type of Change
 - [ ] Bug fix (patch)
 - [ ] New feature (minor)
 - [ ] Breaking change (major)
-- [ ] Documentation update (kein Version-Bump)
+- [ ] Documentation update (no version bump)
 
 ## Checklist
-- [ ] Conventional Commits eingehalten
-- [ ] CI ist grün
-- [ ] Lokal getestet (pnpm start / pnpm tauri build)
-- [ ] Dokumentation aktualisiert (falls nötig)
+- [ ] Follows Conventional Commits
+- [ ] CI is green
+- [ ] Tested locally (`pnpm start` / `pnpm tauri build`)
+- [ ] Documentation updated (if needed)
+
+## Tested On
+<!-- Specify OS and Rust version, e.g.: macOS 14, Ubuntu 22.04, Rust 1.75 -->
 
 ## Screenshots / Recordings
-<!-- Bei UI- oder Terminal-Änderungen -->
+<!-- For UI or terminal changes -->
