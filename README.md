@@ -41,9 +41,11 @@ Stop switching between Terminal, Editor and File Manager. OpenDevDock brings eve
 ```bash
 git clone https://github.com/monosystems/OpenDevDock.git
 cd OpenDevDock
-pnpm install
+pnpm install    # Recommended package manager
 pnpm start
 ```
+
+> **Note:** While npm is supported, we recommend using pnpm for better dependency resolution and faster installs.
 
 ## Install
 
@@ -65,7 +67,9 @@ Install Rust: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
 - **OS**: macOS 12+ / Ubuntu 20.04+ / Debian 11+
 - **Runtime**: Rust 1.70+
-- **Package Manager**: pnpm 8+
+- **Package Manager**: [pnpm](https://pnpm.io/) 8+ (recommended)
+
+> pnpm is used as the package manager for its speed, efficiency, and strict peer dependency resolution.
 
 ## Tech Stack
 
