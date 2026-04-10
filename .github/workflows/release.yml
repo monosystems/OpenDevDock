@@ -20,9 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - name: macOS
+          - name: macOS ARM64
             runner: macos-latest
-            bundles: app
+            bundles: dmg
+          - name: macOS X64
+            runner: macos-13
+            bundles: dmg
           - name: Linux
             runner: ubuntu-latest
             bundles: appimage,deb
@@ -97,13 +100,13 @@ jobs:
         shell: bash
         run: |
           shopt -s nullglob
-          apps=(src-tauri/target/${{ steps.target.outputs.target }}/release/bundle/macos/*.app)
-          if [ ${#apps[@]} -eq 0 ]; then
-            echo "No .app bundle found"
+          dmgs=(src-tauri/target/${{ steps.target.outputs.target }}/release/bundle/dmg/*.dmg)
+          if [ ${#dmgs[@]} -eq 0 ]; then
+            echo "No .dmg bundle found"
             exit 1
           fi
           mkdir -p release-assets
-          ditto -c -k --sequesterRsrc --keepParent "${apps[0]}" "release-assets/${apps[0]##*/}.zip"
+          cp "${dmgs[0]}" "release-assets/"
 
       - name: Prepare Linux assets
         if: runner.os == 'Linux'
