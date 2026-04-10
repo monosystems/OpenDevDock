@@ -30,14 +30,17 @@ jobs:
 
             {{#each categories}}
             ### {{name}}
-            {{#if commit_list}}
-            {{commit_list}}
+            {{#if commits}}
+            {{commits}}
             {{else}}
             *No changes in this category.*
             {{/if}}
             {{/each}}
 
             **Full Changelog**: {{previousTag}}...{{currentTag}}
+          commit_filters:
+            exclude:
+              - merge_commit: true
           include-open-issues: true
           exclude-labels:
             - skip-changelog
@@ -46,13 +49,11 @@ jobs:
               labels:
                 - feat
                 - feature
-              type: added
               commit_pattern: "^(feat|feat-core|feat-ui)(:\\s(.*))?$"
             - title: Bug Fixes
               labels:
                 - fix
                 - bugfix
-              type: fixed
               commit_pattern: "^(fix|fix-core|fix-ui)(:\\s(.*))?$"
             - title: Desktop / Tauri
               labels:
@@ -60,24 +61,17 @@ jobs:
                 - desktop
                 - backend
                 - rust
-              type: changed
-              commit_pattern: "^(feat|fix|chore)(:.*)?$"
             - title: Dependencies
               labels:
                 - dependencies
                 - deps
-              type: changed
-              commit_pattern: "^(chore\\(deps\\)|deps)(:.*)?$"
             - title: Documentation
               labels:
                 - documentation
                 - docs
-              type: changed
               commit_pattern: "^docs(:.*)?$"
             - title: Refactoring / Chores
               labels:
                 - refactoring
                 - chore
                 - test
-              type: changed
-              commit_pattern: "^(refactor|chore|test)(:.*)?$"
