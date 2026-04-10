@@ -1,9 +1,8 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types: [published]
 
 concurrency:
   group: release-workflow
@@ -13,21 +12,8 @@ permissions:
   contents: write
 
 jobs:
-  create-release:
-    name: Create draft release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create draft GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
-          draft: true
-          fail_on_unmatched_files: false
-
   build-and-upload:
     name: Build and upload (${{ matrix.platform.name }})
-    needs: create-release
     runs-on: ${{ matrix.platform.runner }}
     env:
       TAURI_SKIP_SIGNING: true
@@ -117,7 +103,6 @@ jobs:
             echo "No .app bundle found"
             exit 1
           fi
-
           mkdir -p release-assets
           ditto -c -k --sequesterRsrc --keepParent "${apps[0]}" "release-assets/${apps[0]##*/}.zip"
 
@@ -127,15 +112,12 @@ jobs:
         run: |
           shopt -s nullglob
           mkdir -p release-assets
-
           appimages=(src-tauri/target/${{ steps.target.outputs.target }}/release/bundle/appimage/*.AppImage)
           debs=(src-tauri/target/${{ steps.target.outputs.target }}/release/bundle/deb/*.deb)
-
           if [ ${#appimages[@]} -eq 0 ] || [ ${#debs[@]} -eq 0 ]; then
             echo "Expected AppImage and .deb outputs were not found"
             exit 1
           fi
-
           cp "${appimages[@]}" release-assets/
           cp "${debs[@]}" release-assets/
 
@@ -145,18 +127,16 @@ jobs:
         run: |
           $assetDir = "release-assets"
           New-Item -ItemType Directory -Force -Path $assetDir | Out-Null
-
           $executables = Get-ChildItem -Path "src-tauri/target/${{ steps.target.outputs.target }}/release/bundle/nsis" -Filter "*.exe"
           if ($executables.Count -eq 0) {
             throw "No .exe installer found"
           }
-
           Copy-Item -Path $executables.FullName -Destination $assetDir
 
-      - name: Upload release assets
+      - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          draft: true
           files: release-assets/*
+          draft: false
           fail_on_unmatched_files: true
