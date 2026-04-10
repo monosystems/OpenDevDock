@@ -4,11 +4,19 @@
   "description": "Terminal-first Developer Workspace",
   "author": "Monosystems <hello@monosystems.io>",
   "repository": "github:monosystems/OpenDevDock",
-  "keywords": ["terminal", "developer-tools", "workspace", "tauri", "react", "productivity"],
+  "keywords": [
+    "terminal",
+    "developer-tools",
+    "workspace",
+    "tauri",
+    "react",
+    "productivity"
+  ],
   "packageManager": "pnpm@10.32.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:tauri": "node scripts/start-vite-for-tauri.mjs",
     "start": "tauri dev",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -17,13 +25,13 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@tauri-apps/api": "^2.10.1",
-    "@tauri-apps/plugin-dialog": "^2.6.0",
+    "@tauri-apps/plugin-dialog": "^2.7.0",
     "@tauri-apps/plugin-fs": "^2.5.0",
     "@tauri-apps/plugin-shell": "^2.3.5",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
     "react": "^19.2.5",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
