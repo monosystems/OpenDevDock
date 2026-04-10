@@ -26,13 +26,8 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
-<<<<<<< dependabot/npm_and_yarn/commitlint/config-conventional-20.5.0
-    "@commitlint/cli": "^19.0.0",
-    "@commitlint/config-conventional": "^20.5.0",
-=======
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^19.0.0",
->>>>>>> develop
     "@tauri-apps/cli": "^2.10.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
