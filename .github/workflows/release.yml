@@ -24,7 +24,7 @@ jobs:
             runner: macos-latest
             bundles: dmg
           - name: macOS X64
-            runner: macos-13
+            runner: macos-15-intel
             bundles: dmg
           - name: Linux
             runner: ubuntu-latest
