@@ -43,6 +43,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+
       - name: Resolve Rust target
         id: target
         shell: bash
@@ -72,6 +73,7 @@ jobs:
       - name: Add Rust target
         shell: bash
         run: rustup target add "${{ steps.target.outputs.target }}"
+
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
         run: |
@@ -130,6 +132,7 @@ jobs:
             throw "No .exe installer found"
           }
           Copy-Item -Path $executables.FullName -Destination $assetDir
+
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
