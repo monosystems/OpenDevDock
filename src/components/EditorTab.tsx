@@ -2,46 +2,56 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Editor, { OnMount, OnChange, loader } from "@monaco-editor/react";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 
-loader.init().then(
-  (monaco) => {
-    monaco.editor.defineTheme("opendevdock-dark", {
-      base: "vs-dark",
-      inherit: true,
-      rules: [
-        { token: "comment", foreground: "8b95b0", fontStyle: "italic" },
-        { token: "keyword", foreground: "ac89ff" },
-        { token: "string", foreground: "39FF14" },
-        { token: "number", foreground: "00cffc" },
-        { token: "type", foreground: "69daff" },
-        { token: "function", foreground: "69daff" },
-        { token: "variable", foreground: "dee5ff" },
-        { token: "constant", foreground: "00cffc" },
-      ],
-      colors: {
-        "editor.background": "#000000",
-        "editor.foreground": "#dee5ff",
-        "editor.lineHighlightBackground": "#212121",
-        "editor.selectionBackground": "rgba(57, 255, 20, 0.2)",
-        "editor.inactiveSelectionBackground": "rgba(57, 255, 20, 0.1)",
-        "editorCursor.foreground": "#39FF14",
-        "editorLineNumber.foreground": "#8b95b0",
-        "editorLineNumber.activeForeground": "#dee5ff",
-        "editorIndentGuide.background1": "#212121",
-        "editorIndentGuide.activeBackground1": "#39FF14",
-        "editor.selectionHighlightBackground": "rgba(57, 255, 20, 0.1)",
-        "editorBracketMatch.background": "rgba(57, 255, 20, 0.2)",
-        "editorBracketMatch.border": "#39FF14",
-        "scrollbar.shadow": "#000000",
-        "scrollbarSlider.background": "rgba(57, 255, 20, 0.2)",
-        "scrollbarSlider.hoverBackground": "rgba(57, 255, 20, 0.3)",
-        "scrollbarSlider.activeBackground": "rgba(57, 255, 20, 0.4)",
-      },
-    });
-  },
-  (e: unknown) => {
-    console.error("Failed to initialize Monaco editor:", e);
+let monacoThemeInitialization: Promise<void> | null = null;
+
+function ensureMonacoThemeInitialized(): Promise<void> {
+  if (monacoThemeInitialization) {
+    return monacoThemeInitialization;
   }
-);
+
+  monacoThemeInitialization = loader.init().then(
+    (monaco) => {
+      monaco.editor.defineTheme("opendevdock-dark", {
+        base: "vs-dark",
+        inherit: true,
+        rules: [
+          { token: "comment", foreground: "8b95b0", fontStyle: "italic" },
+          { token: "keyword", foreground: "ac89ff" },
+          { token: "string", foreground: "39FF14" },
+          { token: "number", foreground: "00cffc" },
+          { token: "type", foreground: "69daff" },
+          { token: "function", foreground: "69daff" },
+          { token: "variable", foreground: "dee5ff" },
+          { token: "constant", foreground: "00cffc" },
+        ],
+        colors: {
+          "editor.background": "#000000",
+          "editor.foreground": "#dee5ff",
+          "editor.lineHighlightBackground": "#212121",
+          "editor.selectionBackground": "rgba(57, 255, 20, 0.2)",
+          "editor.inactiveSelectionBackground": "rgba(57, 255, 20, 0.1)",
+          "editorCursor.foreground": "#39FF14",
+          "editorLineNumber.foreground": "#8b95b0",
+          "editorLineNumber.activeForeground": "#dee5ff",
+          "editorIndentGuide.background1": "#212121",
+          "editorIndentGuide.activeBackground1": "#39FF14",
+          "editor.selectionHighlightBackground": "rgba(57, 255, 20, 0.1)",
+          "editorBracketMatch.background": "rgba(57, 255, 20, 0.2)",
+          "editorBracketMatch.border": "#39FF14",
+          "scrollbar.shadow": "#000000",
+          "scrollbarSlider.background": "rgba(57, 255, 20, 0.2)",
+          "scrollbarSlider.hoverBackground": "rgba(57, 255, 20, 0.3)",
+          "scrollbarSlider.activeBackground": "rgba(57, 255, 20, 0.4)",
+        },
+      });
+    },
+    (e: unknown) => {
+      console.error("Failed to initialize Monaco editor:", e);
+    }
+  );
+
+  return monacoThemeInitialization;
+}
 
 interface EditorTabProps {
   path: string;
@@ -132,6 +142,11 @@ export function EditorTab({
   
   // Keep path ref updated
   pathRef.current = path;
+
+  // Load file content once on mount
+  useEffect(() => {
+    void ensureMonacoThemeInitialized();
+  }, []);
 
   // Load file content once on mount
   useEffect(() => {
