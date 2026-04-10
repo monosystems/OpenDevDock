@@ -1,12 +1,11 @@
 name: Release
 
 on:
+  push:
+    tags:
+      - "v*"
   release:
     types: [published]
-
-concurrency:
-  group: release-workflow
-  cancel-in-progress: false
 
 permissions:
   contents: write
