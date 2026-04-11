@@ -1,3 +1,5 @@
+![OpenDevDock Banner](.github/assets/banner.png)
+
 # OpenDevDock
 
 **Terminal-first Developer Workspace**
