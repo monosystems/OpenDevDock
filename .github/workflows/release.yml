@@ -1,11 +1,8 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
   release:
-    types: [created]
+    types: [published]
 
 permissions:
   contents: write
@@ -138,7 +135,6 @@ jobs:
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ github.event.release.tag_name }}
           files: release-assets/*
-          draft: false
           fail_on_unmatched_files: true
