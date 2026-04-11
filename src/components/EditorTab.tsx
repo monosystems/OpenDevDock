@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Editor, { OnMount, OnChange, loader } from "@monaco-editor/react";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
+import { FileIcon } from "./ui/Icons";
 
 let monacoThemeInitialization: Promise<void> | null = null;
 
@@ -15,33 +16,33 @@ function ensureMonacoThemeInitialized(): Promise<void> {
         base: "vs-dark",
         inherit: true,
         rules: [
-          { token: "comment", foreground: "8b95b0", fontStyle: "italic" },
-          { token: "keyword", foreground: "ac89ff" },
-          { token: "string", foreground: "39FF14" },
-          { token: "number", foreground: "00cffc" },
-          { token: "type", foreground: "69daff" },
-          { token: "function", foreground: "69daff" },
-          { token: "variable", foreground: "dee5ff" },
-          { token: "constant", foreground: "00cffc" },
+          { token: "comment", foreground: "7f8ba1", fontStyle: "italic" },
+          { token: "keyword", foreground: "c4b5fd" },
+          { token: "string", foreground: "86efac" },
+          { token: "number", foreground: "7dd3fc" },
+          { token: "type", foreground: "93c5fd" },
+          { token: "function", foreground: "bfdbfe" },
+          { token: "variable", foreground: "e5edf8" },
+          { token: "constant", foreground: "7dd3fc" },
         ],
         colors: {
-          "editor.background": "#000000",
-          "editor.foreground": "#dee5ff",
-          "editor.lineHighlightBackground": "#212121",
-          "editor.selectionBackground": "rgba(57, 255, 20, 0.2)",
-          "editor.inactiveSelectionBackground": "rgba(57, 255, 20, 0.1)",
-          "editorCursor.foreground": "#39FF14",
-          "editorLineNumber.foreground": "#8b95b0",
-          "editorLineNumber.activeForeground": "#dee5ff",
-          "editorIndentGuide.background1": "#212121",
-          "editorIndentGuide.activeBackground1": "#39FF14",
-          "editor.selectionHighlightBackground": "rgba(57, 255, 20, 0.1)",
-          "editorBracketMatch.background": "rgba(57, 255, 20, 0.2)",
-          "editorBracketMatch.border": "#39FF14",
-          "scrollbar.shadow": "#000000",
-          "scrollbarSlider.background": "rgba(57, 255, 20, 0.2)",
-          "scrollbarSlider.hoverBackground": "rgba(57, 255, 20, 0.3)",
-          "scrollbarSlider.activeBackground": "rgba(57, 255, 20, 0.4)",
+          "editor.background": "#0b0f15",
+          "editor.foreground": "#e5edf8",
+          "editor.lineHighlightBackground": "#121924",
+          "editor.selectionBackground": "rgba(147, 197, 253, 0.16)",
+          "editor.inactiveSelectionBackground": "rgba(147, 197, 253, 0.08)",
+          "editorCursor.foreground": "#93c5fd",
+          "editorLineNumber.foreground": "#6f7b90",
+          "editorLineNumber.activeForeground": "#dce8f8",
+          "editorIndentGuide.background1": "#182130",
+          "editorIndentGuide.activeBackground1": "#93c5fd",
+          "editor.selectionHighlightBackground": "rgba(147, 197, 253, 0.08)",
+          "editorBracketMatch.background": "rgba(147, 197, 253, 0.12)",
+          "editorBracketMatch.border": "#93c5fd",
+          "scrollbar.shadow": "#0b0f15",
+          "scrollbarSlider.background": "rgba(147, 197, 253, 0.22)",
+          "scrollbarSlider.hoverBackground": "rgba(147, 197, 253, 0.32)",
+          "scrollbarSlider.activeBackground": "rgba(147, 197, 253, 0.42)",
         },
       });
     },
@@ -310,18 +311,37 @@ export function EditorTab({
   }
 
   const language = getLanguageFromPath(path);
+  const fileName = path.split("/").pop() || path;
+  const isDirty = content !== originalContent;
 
   return (
     <div className="editor-tab-container">
-      <Editor
-        height="100%"
-        language={language}
-        value={content}
-        onChange={handleChange}
-        onMount={handleEditorMount}
-        theme="opendevdock-dark"
-        options={editorOptions}
-      />
+      <div className="content-panel-header editor-panel-header">
+        <div className="content-panel-meta">
+          <span className="content-panel-icon"><FileIcon size={14} /></span>
+          <div className="content-panel-copy">
+            <span className="content-panel-title">{fileName}</span>
+            <span className="content-panel-subtitle" title={path}>{path}</span>
+          </div>
+        </div>
+        <div className="content-panel-badges">
+          <span className="content-panel-badge">{language}</span>
+          <span className={`content-panel-badge ${isDirty ? "is-dirty" : "is-saved"}`}>
+            {isDirty ? "Unsaved" : "Saved"}
+          </span>
+        </div>
+      </div>
+      <div className="editor-surface">
+        <Editor
+          height="100%"
+          language={language}
+          value={content}
+          onChange={handleChange}
+          onMount={handleEditorMount}
+          theme="opendevdock-dark"
+          options={editorOptions}
+        />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,17 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileNode } from "../state/types";
 import { useClipboard } from "../contexts/ClipboardContext";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ClipboardPasteIcon,
+  CopyIcon,
+  EditIcon,
+  FileIcon,
+  FolderIcon,
+  ScissorsIcon,
+  TrashIcon,
+} from "./ui/Icons";
 
 interface FileTreeProps {
   nodes: FileNode[];
@@ -39,7 +50,7 @@ export function FileTree({ nodes, onFileClick, onCreateFile, onCreateDirectory, 
     <div>
       {clipboardInfo && (
         <div className="clipboard-indicator">
-          {clipboardInfo.action === "cut" ? "Ausschneiden" : "Kopieren"}: {clipboardInfo.node.name}
+          {clipboardInfo.action === "cut" ? <ScissorsIcon size={12} /> : <CopyIcon size={12} />} {clipboardInfo.action === "cut" ? "Ausschneiden" : "Kopieren"}: {clipboardInfo.node.name}
         </div>
       )}
       {nodes.map((node) => (
@@ -453,13 +464,14 @@ function FileTreeNode({
       >
         {node.is_dir && (
           <span className="file-node-indent">
-            {isExpanded ? "▼" : "▶"}
+            {isExpanded ? <ChevronDownIcon size={12} /> : <ChevronRightIcon size={12} />}
           </span>
         )}
         {!node.is_dir && <span className="file-node-indent" />}
         <span className="file-node-icon">
-          {node.is_dir ? "📁" : "📄"}
+          {node.is_dir ? <FolderIcon size={14} /> : <FileIcon size={14} />}
         </span>
+        {changedFilePaths.has(node.path) && <span className="file-node-change-indicator" aria-hidden="true" />}
         {isRenaming ? (
           <input
             ref={renameInputRef}
@@ -472,7 +484,7 @@ function FileTreeNode({
             onClick={(e) => e.stopPropagation()}
           />
         ) : showNewFileInput ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: "2px", padding: "0 12px" }}>
+          <div className="file-node-inline-form">
             <input
               ref={newFileInputRef}
               type="text"
@@ -486,16 +498,16 @@ function FileTreeNode({
               onBlur={handleCreateFileSubmit}
               onKeyDown={handleCreateFileKeyDown}
               onClick={(e) => e.stopPropagation()}
-              style={newFileError ? { borderColor: "var(--error)" } : undefined}
+              data-invalid={newFileError ? "true" : undefined}
             />
             {newFileError && (
-              <span style={{ color: "var(--error)", fontSize: "11px" }}>
+              <span className="file-node-inline-error">
                 {newFileError}
               </span>
             )}
           </div>
         ) : showNewDirInput ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: "2px", padding: "0 12px" }}>
+          <div className="file-node-inline-form">
             <input
               ref={newDirInputRef}
               type="text"
@@ -509,10 +521,10 @@ function FileTreeNode({
               onBlur={handleCreateDirectorySubmit}
               onKeyDown={handleCreateDirectoryKeyDown}
               onClick={(e) => e.stopPropagation()}
-              style={newDirError ? { borderColor: "var(--error)" } : undefined}
+              data-invalid={newDirError ? "true" : undefined}
             />
             {newDirError && (
-              <span style={{ color: "var(--error)", fontSize: "11px" }}>
+              <span className="file-node-inline-error">
                 {newDirError}
               </span>
             )}
@@ -538,7 +550,7 @@ function FileTreeNode({
                 onKeyDown={(e) => handleMenuKeyDown(e, 0)}
                 role="menuitem"
               >
-                📄 Neue Datei
+                <FileIcon size={14} /> Neue Datei
               </button>
               <button
                 ref={(el) => { menuItemsRef.current[1] = el; }}
@@ -547,7 +559,7 @@ function FileTreeNode({
                 onKeyDown={(e) => handleMenuKeyDown(e, 1)}
                 role="menuitem"
               >
-                📁 Neuer Ordner
+                <FolderIcon size={14} /> Neuer Ordner
               </button>
               <div className="context-menu-divider" role="separator" />
             </>
@@ -560,7 +572,7 @@ function FileTreeNode({
               onKeyDown={(e) => handleMenuKeyDown(e, 2)}
               role="menuitem"
             >
-              📋 Einfügen
+              <ClipboardPasteIcon size={14} /> Einfügen
             </button>
           )}
           <button
@@ -570,7 +582,7 @@ function FileTreeNode({
             onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 3 : 2)}
             role="menuitem"
           >
-            ✂️ Ausschneiden
+            <ScissorsIcon size={14} /> Ausschneiden
           </button>
           <button
             ref={(el) => { menuItemsRef.current[clipboardInfo && node.is_dir ? 4 : 3] = el; }}
@@ -579,7 +591,7 @@ function FileTreeNode({
             onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 4 : 3)}
             role="menuitem"
           >
-            📄 Kopieren
+            <CopyIcon size={14} /> Kopieren
           </button>
           <div className="context-menu-divider" role="separator" />
           <button
@@ -589,7 +601,7 @@ function FileTreeNode({
             onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 5 : 4)}
             role="menuitem"
           >
-            ✏️ Umbenennen
+            <EditIcon size={14} /> Umbenennen
           </button>
           <button
             ref={(el) => { menuItemsRef.current[clipboardInfo && node.is_dir ? 6 : 5] = el; }}
@@ -598,7 +610,7 @@ function FileTreeNode({
             onKeyDown={(e) => handleMenuKeyDown(e, clipboardInfo && node.is_dir ? 6 : 5)}
             role="menuitem"
           >
-            🗑️ Löschen
+            <TrashIcon size={14} /> Löschen
           </button>
         </div>
       )}

@@ -4,6 +4,7 @@ import { FitAddon } from "@xterm/addon-fit";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import "@xterm/xterm/css/xterm.css";
+import { TerminalIcon } from "./ui/Icons";
 
 interface TerminalInstance {
   term: XTerm | null;
@@ -62,26 +63,26 @@ export function Terminal({ terminalId, onResize }: TerminalProps) {
         fontSize: isNaN(fontSize) ? 14 : fontSize,
         fontFamily: "'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace",
         theme: {
-          background: "#000000",
-          foreground: "#dee5ff",
-          cursor: "#39FF14",
-          cursorAccent: "#000000",
-          selectionBackground: "rgba(57, 255, 20, 0.2)",
-          black: "#000000",
-          red: "#ff4444",
-          green: "#39FF14",
-          yellow: "#e5c07b",
-          blue: "#69daff",
-          magenta: "#ac89ff",
-          cyan: "#00cffc",
-          white: "#dee5ff",
-          brightBlack: "#8b95b0",
-          brightRed: "#ff6666",
-          brightGreen: "#69FF14",
-          brightYellow: "#e5c07b",
-          brightBlue: "#69daff",
-          brightMagenta: "#ac89ff",
-          brightCyan: "#00cffc",
+          background: "#0b0f15",
+          foreground: "#e5edf8",
+          cursor: "#93c5fd",
+          cursorAccent: "#0b0f15",
+          selectionBackground: "rgba(147, 197, 253, 0.16)",
+          black: "#0b0f15",
+          red: "#f87171",
+          green: "#86efac",
+          yellow: "#fcd34d",
+          blue: "#93c5fd",
+          magenta: "#c4b5fd",
+          cyan: "#7dd3fc",
+          white: "#e5edf8",
+          brightBlack: "#7f8ba1",
+          brightRed: "#fca5a5",
+          brightGreen: "#bbf7d0",
+          brightYellow: "#fde68a",
+          brightBlue: "#bfdbfe",
+          brightMagenta: "#ddd6fe",
+          brightCyan: "#bae6fd",
           brightWhite: "#ffffff",
         },
       });
@@ -133,7 +134,18 @@ export function Terminal({ terminalId, onResize }: TerminalProps) {
 
   return (
     <div className="terminal-container">
-      <div ref={containerRef} className="terminal-wrapper" />
+      <div className="content-panel-header terminal-panel-header">
+        <div className="content-panel-meta">
+          <span className="content-panel-icon"><TerminalIcon size={14} /></span>
+          <div className="content-panel-copy">
+            <span className="content-panel-title">Terminal</span>
+            <span className="content-panel-subtitle">Interactive shell session</span>
+          </div>
+        </div>
+      </div>
+      <div className="terminal-surface">
+        <div ref={containerRef} className="terminal-wrapper" />
+      </div>
     </div>
   );
 }

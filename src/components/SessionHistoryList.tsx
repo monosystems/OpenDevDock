@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { Session } from "../state/types";
 import { MAX_SESSIONS_DISPLAY } from "../hooks/useSession";
+import { ClockIcon, CloseIcon, EditIcon, TrashIcon } from "./ui/Icons";
 
 interface SessionHistoryListProps {
   projectPath: string;
@@ -162,7 +163,10 @@ export function SessionHistoryList({
     <>
       <div className="session-history-list">
         <div className="session-history-header">
-          <h3>Recent Sessions</h3>
+          <div className="session-history-heading">
+            <h3>Recent Sessions</h3>
+            <p>Resume the latest workspace context without reopening from scratch.</p>
+          </div>
           <span className="session-count">{sessions.length} session{sessions.length !== 1 ? "s" : ""}</span>
           {hasMoreSessions && (
             <button
@@ -189,12 +193,15 @@ export function SessionHistoryList({
                     onClick={(e) => e.stopPropagation()}
                   />
                 ) : (
-                  <span className="session-item-name">
-                    {session.name}
-                  </span>
+                  <div className="session-item-title-row">
+                    <span className="session-item-name">
+                      {session.name}
+                    </span>
+                    <span className="session-item-resume">Resume</span>
+                  </div>
                 )}
                 <div className="session-item-meta">
-                  <span>{formatTimestamp(session.createdAt)}</span>
+                  <span className="session-item-time"><ClockIcon size={12} />{formatTimestamp(session.createdAt)}</span>
                   <span className="session-item-changes">
                     {session.changedFiles.length} change{session.changedFiles.length !== 1 ? "s" : ""}
                   </span>
@@ -206,14 +213,14 @@ export function SessionHistoryList({
                   onClick={(e) => { e.stopPropagation(); handleRename(session); }}
                   title="Rename"
                 >
-                  ✏️
+                  <EditIcon size={14} />
                 </button>
                 <button
                   className="session-action-btn delete"
                   onClick={(e) => { e.stopPropagation(); handleDelete(session.id); }}
                   title="Delete"
                 >
-                  🗑️
+                  <TrashIcon size={14} />
                 </button>
               </div>
             </div>
@@ -226,7 +233,9 @@ export function SessionHistoryList({
           <div className="session-modal" onClick={(e) => e.stopPropagation()}>
             <div className="session-modal-header">
               <h2>All Sessions</h2>
-              <button className="session-modal-close" onClick={() => setShowModal(false)}>×</button>
+              <button className="session-modal-close" onClick={() => setShowModal(false)} aria-label="Close sessions modal">
+                <CloseIcon size={16} />
+              </button>
             </div>
             <div className="session-modal-content">
               {sortedAllSessions.map((session) => (
@@ -249,7 +258,7 @@ export function SessionHistoryList({
                       </span>
                     )}
                     <div className="session-item-meta">
-                      <span>{formatTimestamp(session.createdAt)}</span>
+                      <span className="session-item-time"><ClockIcon size={12} />{formatTimestamp(session.createdAt)}</span>
                       <span className="session-item-changes">
                         {session.changedFiles.length} change{session.changedFiles.length !== 1 ? "s" : ""}
                       </span>
@@ -261,14 +270,14 @@ export function SessionHistoryList({
                       onClick={(e) => { e.stopPropagation(); handleModalRename(session); }}
                       title="Rename"
                     >
-                      ✏️
+                      <EditIcon size={14} />
                     </button>
                     <button
                       className="session-action-btn delete"
                       onClick={(e) => { e.stopPropagation(); handleDelete(session.id); }}
                       title="Delete"
                     >
-                      🗑️
+                      <TrashIcon size={14} />
                     </button>
                   </div>
                 </div>
@@ -283,14 +292,16 @@ export function SessionHistoryList({
           <div className="session-modal" onClick={(e) => e.stopPropagation()}>
             <div className="session-modal-header">
               <h2>Delete Session</h2>
-              <button className="session-modal-close" onClick={handleCancelDelete}>×</button>
+              <button className="session-modal-close" onClick={handleCancelDelete} aria-label="Close delete dialog">
+                <CloseIcon size={16} />
+              </button>
             </div>
-            <div className="session-modal-content" style={{ padding: "20px" }}>
-              <p style={{ marginBottom: "20px", color: "var(--on-surface)" }}>
+            <div className="session-modal-content session-delete-modal-content">
+              <p className="session-delete-message">
                 Delete session <strong>"{confirmDelete.sessionName}"</strong>?<br />
                 This cannot be undone.
               </p>
-              <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <div className="session-delete-actions">
                 <button className="btn-cancel" onClick={handleCancelDelete}>Cancel</button>
                 <button className="btn-danger" onClick={handleConfirmDelete}>Delete</button>
               </div>

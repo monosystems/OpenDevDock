@@ -289,7 +289,11 @@ fn create_terminal(
 
     // Create shell command based on platform
     #[cfg(target_os = "macos")]
-    let mut cmd = CommandBuilder::new("/bin/zsh");
+    let mut cmd = {
+        let mut cmd = CommandBuilder::new("/bin/zsh");
+        cmd.arg("-f");
+        cmd
+    };
 
     #[cfg(not(target_os = "macos"))]
     let mut cmd = CommandBuilder::new("/bin/bash");
