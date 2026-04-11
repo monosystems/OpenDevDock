@@ -7,6 +7,7 @@ import { TabBar } from "../components/TabBar";
 import { TabContent } from "../components/TabContent";
 import { Resizer } from "../components/Resizer";
 import { useToast } from "../contexts/ToastContext";
+import { ArrowLeftIcon, FolderIcon } from "../components/ui/Icons";
 
 import {
   createFile,
@@ -37,6 +38,43 @@ export interface TabItem {
   path?: string;
   terminalId?: string;
   isDirty?: boolean;
+}
+
+interface SessionDisplayInfo {
+  branch: string | null;
+  timestamp: string | null;
+}
+
+function stripProjectPrefix(sessionName: string, projectName: string): string {
+  if (sessionName.startsWith(`${projectName}_`)) {
+    return sessionName.slice(projectName.length + 1);
+  }
+
+  if (sessionName.startsWith(`${projectName} - `)) {
+    return sessionName.slice(projectName.length + 3);
+  }
+
+  return sessionName;
+}
+
+function parseSessionDisplayInfo(sessionName: string, projectName: string): SessionDisplayInfo {
+  const match = sessionName.match(/^(.*?)\s*\(([^)]+)\)\s*-\s*(.+)$/);
+
+  if (!match) {
+    return {
+      branch: null,
+      timestamp: null,
+    };
+  }
+
+  const [, primary, branch, timestamp] = match;
+
+  const cleanedPrimary = stripProjectPrefix(primary.trim(), projectName);
+
+  return {
+    branch: branch.trim() || cleanedPrimary || null,
+    timestamp: timestamp.trim(),
+  };
 }
 
 export function WorkspaceView({
@@ -75,6 +113,7 @@ export function WorkspaceView({
   } = useTerminalManager();
 
   const toast = useToast();
+  const sessionDisplay = session ? parseSessionDisplayInfo(session.name, project.name) : null;
 
   useEffect(() => {
     loadFileTree();
@@ -359,39 +398,64 @@ export function WorkspaceView({
   return (
     <div className="app-container">
       <div className="app-header">
-        <button onClick={onClose}>← Back</button>
-        <span>{project.name}</span>
-        {session && (
-          <span className="session-name" title={session.name}>
-            | Session: {session.name}
-          </span>
-        )}
-      </div>
-      <div className="app-content">
-        <div className="file-tree" style={{ width: treeWidth }}>
-          <div className="file-tree-header">Explorer</div>
-          <div
-            className={`file-tree-root-drop ${rootDragOver ? 'file-node-drag-over' : ''}`}
-            data-node-path={project.path}
-            data-is-dir="true"
-          >
-            🏠 {project.name}/
-          </div>
-          <div className="file-tree-content">
-            <FileTree
-              nodes={fileTree}
-              onFileClick={handleFileClick}
-              onCreateFile={handleCreateFile}
-              onCreateDirectory={handleCreateDirectory}
-              onRename={handleRename}
-              onDelete={handleDelete}
-              onMove={handleMove}
-              rootPath={project.path}
-              onRootDragOverChange={setRootDragOver}
-              changedFilePaths={changedFilePaths}
-            />
+        <div className="header-main">
+          <button className="header-back-button" onClick={onClose}>
+            <ArrowLeftIcon size={14} />
+            Projects
+          </button>
+          <div className="header-project-meta">
+            <span className="header-project-name">{project.name}</span>
+            <span className="header-project-path" title={project.path}>{project.path}</span>
           </div>
         </div>
+        {session && sessionDisplay && (
+          <div className="session-name header-session-chip" title={session.name}>
+            {sessionDisplay.branch && (
+              <span className="header-session-branch">{sessionDisplay.branch}</span>
+            )}
+            {sessionDisplay.timestamp && (
+              <span className="header-session-meta">{sessionDisplay.timestamp}</span>
+            )}
+          </div>
+        )}
+      </div>
+        <div className="app-content">
+          <div className="file-tree" style={{ width: treeWidth }}>
+            <div className="file-tree-header">
+              <span className="file-tree-header-label">Explorer</span>
+              <span className="file-tree-header-caption">Workspace navigation</span>
+            </div>
+            <div className="file-tree-body">
+              <div
+                className={`file-tree-root-drop ${rootDragOver ? 'file-node-drag-over' : ''}`}
+                data-node-path={project.path}
+                data-is-dir="true"
+              >
+                <span className="file-tree-root-icon">
+                  <FolderIcon size={14} />
+                </span>
+                <div className="file-tree-root-meta">
+                  <span className="file-tree-root-name">{project.name}</span>
+                  <span className="file-tree-root-path" title={project.path}>{project.path}</span>
+                </div>
+              </div>
+              <div className="file-tree-section-label">Files</div>
+              <div className="file-tree-content">
+                <FileTree
+                  nodes={fileTree}
+                  onFileClick={handleFileClick}
+                  onCreateFile={handleCreateFile}
+                  onCreateDirectory={handleCreateDirectory}
+                  onRename={handleRename}
+                  onDelete={handleDelete}
+                  onMove={handleMove}
+                  rootPath={project.path}
+                  onRootDragOverChange={setRootDragOver}
+                  changedFilePaths={changedFilePaths}
+                />
+              </div>
+            </div>
+          </div>
         <Resizer onResize={handleTreeResize} />
         <div className="main-area">
           <TabBar

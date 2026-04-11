@@ -25,6 +25,9 @@ export function TabContent({
   onEditorMount,
   onOriginalContentLoaded,
 }: TabContentProps) {
+  const getPanelClassName = (isActive: boolean): string =>
+    `tab-panel ${isActive ? "is-active" : ""}`;
+
   return (
     <div className="tab-content">
       {tabs.map((tab) => {
@@ -36,7 +39,7 @@ export function TabContent({
               id={`panel-${tab.id}`}
               aria-labelledby={`tab-${tab.id}`}
               hidden={tab.id !== activeTabId}
-              style={{ display: tab.id === activeTabId ? "block" : "none", height: "100%", position: "relative" }}
+              className={getPanelClassName(tab.id === activeTabId)}
             >
               <Terminal
                 terminalId={tab.id}
@@ -54,7 +57,7 @@ export function TabContent({
               id={`panel-${tab.id}`}
               aria-labelledby={`tab-${tab.id}`}
               hidden={tab.id !== activeTabId}
-              style={{ display: tab.id === activeTabId ? "block" : "none", height: "100%", position: "relative" }}
+              className={getPanelClassName(tab.id === activeTabId)}
             >
               <EditorTab
                 path={filePath}
@@ -74,7 +77,7 @@ export function TabContent({
               id={`panel-${tab.id}`}
               aria-labelledby={`tab-${tab.id}`}
               hidden={tab.id !== activeTabId}
-              style={{ display: tab.id === activeTabId ? "block" : "none", height: "100%", position: "relative" }}
+              className={getPanelClassName(tab.id === activeTabId)}
             >
               <ChangesTab session={session} />
             </div>

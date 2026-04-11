@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { readTextFile } from "@tauri-apps/plugin-fs";
+import { FileIcon } from "./ui/Icons";
 
 interface FileTabProps {
   path: string;
@@ -47,9 +48,18 @@ export function FileTab({ path }: FileTabProps) {
 
   return (
     <div className="file-tab-content">
-      <pre style={{ padding: "16px", margin: 0, overflow: "auto" }}>
-        {content}
-      </pre>
+      <div className="content-panel-header file-preview-header">
+        <div className="content-panel-meta">
+          <span className="content-panel-icon"><FileIcon size={14} /></span>
+          <div className="content-panel-copy">
+            <span className="content-panel-title">{path.split("/").pop() || path}</span>
+            <span className="content-panel-subtitle" title={path}>{path}</span>
+          </div>
+        </div>
+      </div>
+      <div className="file-preview-surface">
+        <pre className="file-preview-content">{content}</pre>
+      </div>
     </div>
   );
 }
